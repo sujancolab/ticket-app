@@ -3,5 +3,11 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "vue-vite"
+  "type": "vue-vite",
+   "proxy": [
+    {
+      "path": "/api",
+      "proxyUrl": "https://dummymm.tech-trico.com/api"
+    }
+  ]
 }
