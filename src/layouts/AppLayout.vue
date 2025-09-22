@@ -4,7 +4,7 @@
       <!-- Sidebar Menu -->
       <ion-menu content-id="main-content">
         <ion-header>
-          <ion-toolbar color="primary">
+          <ion-toolbar>
             <div class="logo-container">
               <img src="/src/assets/logo.png" alt="Company Logo" class="logo">
             </div>
@@ -84,18 +84,20 @@ const logout = () => {
 </script>
 
 <style scoped>
-.selected {
-  --background: rgba(var(--ion-color-primary-rgb), 0.1);
-  --color: var(--ion-color-primary);
+/* Grey background for sidebar */
+ion-menu {
+  --background: #f1f1f1;
+  --min-width: 260px;
 }
 
-ion-menu::part(container) {
-  border-right: 1px solid var(--ion-color-light-shade);
-}
-
-ion-footer ion-toolbar {
-  --background: transparent;
-  --border-width: 0;
+/* Header styling */
+ion-toolbar {
+  --background: #fff;
+  border-bottom: 1px solid #ddd;
+  --min-height: 180px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo-container {
@@ -110,15 +112,37 @@ ion-footer ion-toolbar {
   object-fit: contain;
 }
 
-ion-toolbar {
-  --min-height: 180px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 ion-title {
   margin-top: 8px;
   font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Menu Items */
+ion-item {
+  --background: #fff;
+  --color: #333;
+  --border-radius: 6px;
+  margin: 6px 12px;
+  transition: background 0.2s;
+}
+
+/* Hover and selected states */
+ion-item:hover {
+  --background: #f7c600;
+  --color: #333;
+}
+
+.selected {
+  --background: #f7c600;
+  --color: #333;
+  font-weight: 600;
+}
+
+/* Footer */
+ion-footer ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
 }
 </style>

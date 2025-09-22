@@ -160,7 +160,6 @@ const loadTickets = async () => {
 
 const viewTicket = (ticket: Ticket) => {
   selectedTicket.value = ticket;
-  console.log(ticket);
   viewModalOpen.value = true;
 };
 
@@ -171,26 +170,201 @@ const closeViewModal = () => {
 
 const formatDate = (dateString: string) => dateString ? new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
 const truncateText = (text: string, maxLength: number) => text?.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-const getStatusColor = (status: string) => status.toLowerCase() === 'open' ? 'danger' : status.toLowerCase() === 'closed' ? 'success' : 'medium';
+const getStatusColor = (status: string) => status.toLowerCase() === 'open' ? 'warning' : status.toLowerCase() === 'closed' ? 'success' : 'medium';
 const refreshTickets = () => loadTickets();
 const navigateToAddTicket = () => router.push('/ticket/add');
 const openFilterModal = () => console.log("Open Filters");
 </script>
 
 <style scoped>
-.ticket-card {
-  margin: 12px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+/* Page background with soft gradient */
+ion-content {
+  --background: linear-gradient(135deg, #f9f9f9, #eef2f3);
+  padding: 12px 0;
 }
-.ticket-card:hover { transform: translateY(-2px); }
-.status-chip { position: absolute; top: 12px; right: 12px; font-size: 0.85rem; }
-ion-card-content p { margin: 4px 0; font-size: 0.9rem; }
 
-.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: var(--ion-color-medium); }
-.empty-state ion-icon { font-size: 48px; margin-bottom: 16px; color: var(--ion-color-medium-shade); }
+/* Toolbar with slight shadow */
+ion-toolbar {
+  --background: #ffffff;
+  border-bottom: 2px solid #f1c40f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
-ion-modal { --width: 95%; --height: 90%; --border-radius: 12px; --box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
-ion-list ion-item { --background: #f8f9fa; margin-bottom: 6px; border-radius: 8px; }
+/* Title */
+ion-title {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+/* Toolbar buttons */
+ion-button {
+  --color: #2c3e50;
+  --background: transparent;
+  --ripple-color: #f1c40f;
+  transition: all 0.3s ease;
+}
+ion-button:hover {
+  --color: #f1c40f;
+  transform: scale(1.1);
+}
+
+/* Ticket card with glassmorphism effect */
+.ticket-card {
+  margin: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(241, 196, 15, 0.3);
+  position: relative;
+  cursor: pointer;
+}
+.ticket-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  border-color: #f1c40f;
+}
+
+/* Card header & title */
+ion-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 4px;
+}
+ion-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  letter-spacing: 0.3px;
+}
+
+/* Status chip with gradient colors */
+.status-chip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 14px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Card content */
+ion-card-content p {
+  margin: 6px 0;
+  font-size: 0.9rem;
+  color: #34495e;
+  line-height: 1.4;
+}
+ion-card-content strong {
+  color: #2c3e50;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  color: #7f8c8d;
+  gap: 12px;
+}
+.empty-state ion-icon {
+  font-size: 60px;
+  color: #bdc3c7;
+  animation: pulseIcon 1.5s infinite ease-in-out;
+}
+@keyframes pulseIcon {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Modal with soft edges */
+ion-modal {
+  --width: 92%;
+  --height: 88%;
+  --border-radius: 16px;
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+/* Modal cards */
+ion-modal ion-card {
+  margin-bottom: 14px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  background: #fff;
+}
+ion-modal ion-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Modal header & title */
+ion-modal ion-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 6px;
+}
+ion-modal ion-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* List items inside modal */
+ion-list ion-item {
+  --background: #f9fafb;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease;
+}
+ion-list ion-item:hover {
+  --background: #fff8e1;
+}
+
+/* Chips in modal */
+ion-chip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .ticket-card {
+    margin: 10px;
+    padding: 8px;
+  }
+  ion-card-content p {
+    font-size: 0.85rem;
+  }
+  ion-card-title {
+    font-size: 0.95rem;
+  }
+  .status-chip {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+}
 </style>
