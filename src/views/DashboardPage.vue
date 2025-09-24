@@ -50,12 +50,19 @@ import {
   IonGrid, IonRow, IonCol, IonMenuButton, IonButtons
 } from '@ionic/vue';
 
+
+
 const router = useRouter();
 const username = ref('');
 
 onMounted(() => {
   const userData = JSON.parse(localStorage.getItem('user') || '{}');
   username.value = userData?.name || 'User';
+  console.log("reached here");
+   if (localStorage.getItem('reloadDashboard') === 'true') {
+    localStorage.removeItem('reloadDashboard');
+    window.location.reload();
+  }
 });
 
 const navigateToTickets = () => {
@@ -89,7 +96,7 @@ ion-content {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   background: #fff;
   overflow: hidden;
-  border-top: 4px solid #f7c600; /* Yellow accent */
+  border-top: 4px solid #7d6412; /* Yellow accent */
 }
 
 .dashboard-card:hover {

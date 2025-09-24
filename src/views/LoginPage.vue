@@ -67,7 +67,8 @@ import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
   IonItem, IonLabel, IonInput, IonButton, IonNote,
-  IonSpinner, toastController
+  IonSpinner, toastController,
+  useIonRouter
 } from '@ionic/vue';
 
 const router = useRouter();
@@ -75,7 +76,7 @@ const username = ref('');
 const password = ref('');
 const submitted = ref(false);
 const isLoggingIn = ref(false);
-
+const ionRouter = useIonRouter();
 const login = async () => {
   submitted.value = true;
   
@@ -113,7 +114,12 @@ const login = async () => {
       await toast.present();
 
       // Redirect to dashboard
-      router.push('/app/dashboard');
+      // router.push('/app/dashboard');
+      // router.replace('/app/dashboard');
+      // router.replace({ path: '/app/dashboard', force: true });
+      localStorage.setItem('reloadDashboard', 'true');
+       ionRouter.navigate('/app/dashboard', 'root');
+
     } else {
       const toast = await toastController.create({
         message: response.data.message || 'Invalid credentials',
@@ -187,8 +193,8 @@ ion-item {
   --padding-end: 0;
   --inner-padding-end: 0;
   --min-height: 68px;
-  --highlight-color-focused: #f7c600; /* Yellow */
-  --highlight-color-valid: #f7c600;
+  --highlight-color-focused: #7d6412; /* Yellow */
+  --highlight-color-valid: #7d6412;
   --highlight-color-invalid: #f44336;
 }
 
@@ -218,8 +224,8 @@ ion-note[slot="error"] {
 ion-button {
   margin-top: 24px;
   --border-radius: 8px;
-  --background: #f7c600;
-  --color: #333;
+  --background: #7d6412;
+  --color: #f8f4f4;
   font-weight: 600;
 }
 

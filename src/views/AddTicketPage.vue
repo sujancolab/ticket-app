@@ -1144,7 +1144,7 @@ const camelCase = (value: string) => {
   --color: #2c3e50;
   padding: 8px 16px;
   height: 60px;
-  border-bottom: 2px solid #f1c40f;
+  border-bottom: 2px solid #7d6412;
 }
 
 .title-container {
@@ -1157,14 +1157,14 @@ const camelCase = (value: string) => {
 }
 
 .title-icon {
-  color: #f1c40f;
+  color: #7d6412;
   font-size: 20px;
 }
 
 .reset-btn {
   --color: #7f8c8d;
   --border-color: #bdc3c7;
-  --background-hover: #f1c40f;
+  --background-hover: #7d6412;
   --color-hover: #2c3e50;
   font-size: 14px;
 }
@@ -1194,7 +1194,7 @@ const camelCase = (value: string) => {
   padding: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #bdc3c7;
-  border-left: 4px solid #f1c40f;
+  border-left: 4px solid #7d6412;
 }
 
 .section-header {
@@ -1217,7 +1217,7 @@ const camelCase = (value: string) => {
 }
 
 .section-icon {
-  color: #f1c40f;
+  color: #7d6412;
   font-size: 20px;
 }
 
@@ -1276,7 +1276,7 @@ const camelCase = (value: string) => {
 .professional-select:focus,
 .professional-textarea:focus,
 .professional-datetime:focus {
-  border-color: #f1c40f !important;
+  border-color: #7d6412 !important;
   background: #fffdf0 !important;
   outline: none !important;
   box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.1) !important;
@@ -1314,7 +1314,7 @@ const camelCase = (value: string) => {
   --color: #7f8c8d;
   --color-checked: #2c3e50;
   --background: transparent;
-  --background-checked: #f1c40f;
+  --background-checked: #7d6412;
   margin: 2px;
   border-radius: 6px;
   font-weight: 600;
@@ -1343,7 +1343,7 @@ const camelCase = (value: string) => {
 
 .radio-option:hover {
   background: #fffdf0;
-  border-color: #f1c40f;
+  border-color: #7d6412;
   transform: translateY(-1px);
 }
 
@@ -1356,7 +1356,7 @@ const camelCase = (value: string) => {
 }
 
 .radio-icon {
-  color: #f1c40f;
+  color: #7d6412;
   font-size: 16px;
 }
 
@@ -1397,7 +1397,7 @@ const camelCase = (value: string) => {
 }
 
 .cost-icon {
-  color: #f1c40f;
+  color: #7d6412;
   font-size: 18px;
 }
 
@@ -1426,11 +1426,11 @@ const camelCase = (value: string) => {
 
 .file-upload-label:hover {
   background: #fffdf0;
-  border-color: #f1c40f;
+  border-color: #7d6412;
 }
 
 .upload-icon {
-  color: #f1c40f;
+  color: #7d6412;
 }
 
 /* Stages & Problems Tables */
@@ -1468,12 +1468,12 @@ const camelCase = (value: string) => {
 .add-problem-btn {
   font-size: 14px;
   --color: #2c3e50;
-  --border-color: #f1c40f;
+  --border-color: #7d6412;
 }
 
 .submit-btn {
-  --background: #f1c40f;
-  --color: #2c3e50;
+  --background: #7d6412;
+  --color: #f4f5f5;
   font-weight: 600;
   font-size: 16px;
 }

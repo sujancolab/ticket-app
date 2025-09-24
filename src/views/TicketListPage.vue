@@ -186,7 +186,7 @@ ion-content {
 /* Toolbar with slight shadow */
 ion-toolbar {
   --background: #ffffff;
-  border-bottom: 2px solid #f1c40f;
+  border-bottom: 2px solid #7d6412;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -201,11 +201,11 @@ ion-title {
 ion-button {
   --color: #2c3e50;
   --background: transparent;
-  --ripple-color: #f1c40f;
+  --ripple-color: #7d6412;
   transition: all 0.3s ease;
 }
 ion-button:hover {
-  --color: #f1c40f;
+  --color: #7d6412;
   transform: scale(1.1);
 }
 
@@ -224,7 +224,7 @@ ion-button:hover {
 .ticket-card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-  border-color: #f1c40f;
+  border-color: #7d6412;
 }
 
 /* Card header & title */
@@ -251,7 +251,7 @@ ion-card-title {
   top: 12px;
   right: 12px;
   text-transform: uppercase;
-  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  background: linear-gradient(135deg, #7d6412, #f39c12);
   color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -345,7 +345,7 @@ ion-chip {
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  background: linear-gradient(135deg, #7d6412, #f39c12);
   color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

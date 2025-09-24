@@ -1,5 +1,5 @@
 <template>
-  <ion-app>
+   <ion-page>
     <ion-split-pane content-id="main-content">
       <!-- Sidebar Menu -->
       <ion-menu content-id="main-content">
@@ -58,13 +58,13 @@
       <!-- Main Content Area -->
       <ion-router-outlet id="main-content" />
     </ion-split-pane>
-  </ion-app>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { 
-  IonApp, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, 
+  IonApp,IonPage, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, 
   IonContent, IonList, IonItem, IonLabel, IonMenuToggle, IonFooter,
   IonButton, IonIcon, IonRouterOutlet
 } from '@ionic/vue';
@@ -130,13 +130,13 @@ ion-item {
 
 /* Hover and selected states */
 ion-item:hover {
-  --background: #f7c600;
-  --color: #333;
+  --background: #7d6412;
+  --color: #fafafa;
 }
 
 .selected {
-  --background: #f7c600;
-  --color: #333;
+  --background: #7d6412;
+  --color: #f9f7f7;
   font-weight: 600;
 }
 
