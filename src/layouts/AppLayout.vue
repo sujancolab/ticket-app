@@ -1,14 +1,15 @@
 <template>
-   <ion-page>
+  <ion-app>
     <ion-split-pane content-id="main-content">
       <!-- Sidebar Menu -->
       <ion-menu content-id="main-content">
         <ion-header>
-          <ion-toolbar>
-            <div class="logo-container">
-              <img src="/src/assets/logo.png" alt="Company Logo" class="logo">
+          <ion-toolbar color="" class="profile-toolbar">
+            <div class="profile-container">
+              <img :src="'/src/assets/default-profile.jpg'" alt="Profile" class="profile-image"
+              width="35%"/>
             </div>
-            <ion-title>Menu</ion-title>
+            <div class="profile-name">{{ username }}</div>
           </ion-toolbar>
         </ion-header>
         
@@ -41,34 +42,35 @@
                 <ion-icon slot="start" :icon="add"></ion-icon>
                 <ion-label>Add Ticket</ion-label>
               </ion-item>
+
+              <ion-item 
+                button 
+                @click="logout"
+                :class="{ 'selected': $route.name === 'AddTicket' }"
+              >
+                <ion-icon slot="start" :icon="logOut"></ion-icon>
+                <ion-label>Logout</ion-label>
+              </ion-item>
             </ion-menu-toggle>
           </ion-list>
         </ion-content>
-        
-        <ion-footer>
-          <ion-toolbar>
-            <ion-button expand="block" @click="logout" color="danger">
-              <ion-icon slot="start" :icon="logOut"></ion-icon>
-              Logout
-            </ion-button>
-          </ion-toolbar>
-        </ion-footer>
       </ion-menu>
       
       <!-- Main Content Area -->
       <ion-router-outlet id="main-content" />
     </ion-split-pane>
-  </ion-page>
+  </ion-app>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { 
-  IonApp,IonPage, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, 
+  IonApp, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, 
   IonContent, IonList, IonItem, IonLabel, IonMenuToggle, IonFooter,
   IonButton, IonIcon, IonRouterOutlet
 } from '@ionic/vue';
 import { home, list, add, logOut } from 'ionicons/icons';
+import { ref, onMounted } from 'vue';
 
 const router = useRouter();
 
@@ -81,68 +83,72 @@ const logout = () => {
   localStorage.removeItem('username');
   router.push('/login');
 };
+
+const username = ref('');
+
+onMounted(() => {
+  const userData = JSON.parse(localStorage.getItem('user') || '{}');
+  username.value = userData?.name || 'User';
+});
 </script>
 
 <style scoped>
-/* Grey background for sidebar */
-ion-menu {
-  --background: #f1f1f1;
-  --min-width: 260px;
+ion-header{
+  box-shadow: none;
+}
+.selected {
+  --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  --color: var(--ion-color-primary);
 }
 
-/* Header styling */
+ion-menu::part(container) {
+  border-right: 1px solid var(--ion-color-light-shade);
+}
+
+ion-footer ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+}
+
+.profile-name{
+  text-align: center;
+  font-weight: 600;
+}
+
+.profile-container{
+  display: flex;
+  justify-content: center;
+  padding: 16px 16px 8px;
+}
+
+.profile-image{
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+  /* display: flex;
+  justify-content: center;
+  padding: 16px 16px 8px; */
+}
+
+.logo {
+  max-width: 50%;
+  /* max-height: 80px; */
+  object-fit: contain;
+}
+
 ion-toolbar {
-  --background: #fff;
-  border-bottom: 1px solid #ddd;
   --min-height: 180px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.logo-container {
-  display: flex;
-  justify-content: center;
-  padding: 16px 16px 8px;
-}
-
-.logo {
-  max-width: 80%;
-  max-height: 80px;
-  object-fit: contain;
-}
-
 ion-title {
   margin-top: 8px;
   font-size: 1.2rem;
-  color: #333;
-  font-weight: 600;
-}
-
-/* Menu Items */
-ion-item {
-  --background: #fff;
-  --color: #333;
-  --border-radius: 6px;
-  margin: 6px 12px;
-  transition: background 0.2s;
-}
-
-/* Hover and selected states */
-ion-item:hover {
-  --background: #7d6412;
-  --color: #fafafa;
-}
-
-.selected {
-  --background: #7d6412;
-  --color: #f9f7f7;
-  font-weight: 600;
-}
-
-/* Footer */
-ion-footer ion-toolbar {
-  --background: transparent;
-  --border-width: 0;
 }
 </style>

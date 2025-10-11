@@ -1,54 +1,44 @@
 <template>
   <ion-page>
-    <ion-header class="professional-header">
-      <ion-toolbar class="header-toolbar">
+    <ion-header>
+      <ion-toolbar color="primary">
         <ion-buttons slot="start">
           <ion-menu-button class="menu-btn"></ion-menu-button>
         </ion-buttons>
         <ion-title class="header-title">
-          <div class="title-container">
-            <ion-icon :icon="ticketIcon" class="title-icon"></ion-icon>
-            {{ form.id ? 'Update Ticket' : 'Create New Ticket' }}
-          </div>
+          {{ form.id ? 'Update Ticket' : 'Create New Ticket' }}
         </ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="resetForm" fill="outline" class="reset-btn">
-            <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
-            Reset
+          <ion-button @click="resetForm">
+            <ion-icon :icon="refreshOutline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content class="professional-content">
-      <div class="form-container">
+      <div style="padding: 5px;">
         <form @submit.prevent="submitTicket" class="professional-form">
           <!-- Machine Configuration Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <ion-icon :icon="settingsOutline" class="section-icon"></ion-icon>
-              <h2>Machine Configuration</h2>
-            </div>
-            
-            <div class="form-grid">
-              <!-- Machine Site -->
-              <div class="form-field">
-                <label class="field-label">
-                  Machine Site <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.site_id"
-                  interface="popover"
-                  placeholder="Select Machine Site"
-                  @ionChange="onSiteChange"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && !form.site_id }"
-                >
-                  <ion-select-option 
-                    v-for="site in sites" 
-                    :key="site.id" 
-                    :value="site.id"
-                  >
+          <ion-card class="form-section">
+            <ion-card-header style="padding: 0px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <ion-icon :icon="settingsOutline" class="section-icon"></ion-icon>
+                <h5 style="margin: 0; color: black;">Machine Configuration</h5>
+              </div>
+            </ion-card-header>
+            <ion-card-content style="padding: 0px;">
+              <div class="form-grid">
+                <!-- Machine Site -->
+
+                <!-- <label class="field-label">
+                    Machine Site <span class="required-indicator">*</span>
+                  </label> -->
+                <ion-select v-model="form.site_id" interface="action-sheet" placeholder="Select Machine Site"
+                  label="Machine Site *" labelPlacement="floating" @ionChange="onSiteChange"
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.site_id }]"
+                  style="color: black;">
+                  <ion-select-option v-for="site in sites" :key="site.id" :value="site.id">
                     {{ site.site_name }}
                   </ion-select-option>
                 </ion-select>
@@ -56,26 +46,18 @@
                   <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
                   Site selection is required
                 </div>
-              </div>
 
-              <!-- Machine Category -->
-              <div class="form-field">
-                <label class="field-label">
-                  Machine Category <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.category_id"
-                  interface="popover"
-                  placeholder="Select Category"
-                  @ionChange="onCategoryChange"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && !form.category_id }"
-                >
-                  <ion-select-option 
-                    v-for="category in categories" 
-                    :key="category.id" 
-                    :value="category.id"
-                  >
+
+                <!-- Machine Category -->
+
+                <!-- <label class="field-label">
+                    Machine Category <span class="required-indicator">*</span>
+                  </label> -->
+                <ion-select v-model="form.category_id" interface="action-sheet" placeholder="Select Category"
+                  label="Machine Category *" labelPlacement="floating" @ionChange="onCategoryChange"
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.category_id }]"
+                  style="color: black;">
+                  <ion-select-option v-for="category in categories" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </ion-select-option>
                 </ion-select>
@@ -83,26 +65,16 @@
                   <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
                   Category selection is required
                 </div>
-              </div>
 
-              <!-- Machine Sub Category -->
-              <div class="form-field">
-                <label class="field-label">
-                  Machine Sub Category <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.sub_category_id"
-                  interface="popover"
-                  placeholder="Select Sub Category"
-                  @ionChange="onSubCategoryChange"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && !form.sub_category_id }"
-                >
-                  <ion-select-option 
-                    v-for="subCategory in sub_categories" 
-                    :key="subCategory.id" 
-                    :value="subCategory.id"
-                  >
+
+                <!-- Machine Sub Category -->
+
+                <ion-select v-model="form.sub_category_id" interface="popover" placeholder="Select Sub Category"
+                  label="Machine Sub Category *" labelPlacement="floating" @ionChange="onSubCategoryChange"
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.sub_category_id }]"
+                  style="color: black;">
+                  <ion-select-option v-for="subCategory in sub_categories" :key="subCategory.id"
+                    :value="subCategory.id">
                     {{ subCategory.name }}
                   </ion-select-option>
                 </ion-select>
@@ -110,26 +82,15 @@
                   <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
                   Sub Category selection is required
                 </div>
-              </div>
 
-              <!-- Select Machine -->
-              <div class="form-field">
-                <label class="field-label">
-                  Select Machine <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.machine_id"
-                  interface="popover"
-                  placeholder="Choose Machine"
-                  @ionChange="onMachineChange"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && !form.machine_id }"
-                >
-                  <ion-select-option 
-                    v-for="machine in machines" 
-                    :key="machine.id" 
-                    :value="machine.id"
-                  >
+
+                <!-- Select Machine -->
+
+                <ion-select v-model="form.machine_id" interface="popover" placeholder="Choose Machine"
+                  @ionChange="onMachineChange" label="Select Machine *" labelPlacement="floating"
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.machine_id }]"
+                  style="color: black;">
+                  <ion-select-option v-for="machine in machines" :key="machine.id" :value="machine.id">
                     {{ getMachineLabel(machine) }}
                   </ion-select-option>
                 </ion-select>
@@ -138,40 +99,33 @@
                   Machine selection is required
                 </div>
               </div>
-            </div>
-          </div>
+            </ion-card-content>
+          </ion-card>
 
           <!-- Problem Details Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <ion-icon :icon="bugOutline" class="section-icon"></ion-icon>
-              <h2>Problem Details</h2>
-            </div>
-            
-            <div class="form-grid">
-              <!-- Problem Description -->
-              <div class="form-field full-width">
-                <label class="field-label">Machine's Problem Description</label>
-                <ion-textarea
-                  v-model="form.problem_description"
-                  placeholder="Describe the machine's problem in detail..."
-                  rows="4"
-                  class="professional-textarea"
-                ></ion-textarea>
-              </div>
 
-              <!-- Complaint Nature -->
-              <div class="form-field">
-                <label class="field-label">
-                  Complaint Nature <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.complaint_nature"
-                  interface="popover"
-                  placeholder="Select Nature"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && !form.complaint_nature }"
-                >
+          <ion-card class="form-section">
+            <ion-card-header style="padding: 0px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <ion-icon :icon="bugOutline" class="section-icon"></ion-icon>
+                <h5 style="margin: 0; color: black;">Problem Details</h5>
+              </div>
+            </ion-card-header>
+            <ion-card-content style="padding: 0px;">
+
+              <div class="form-grid">
+                <!-- Problem Description -->
+                <div class="form-field full-width">
+                  <label class="field-label">Machine's Problem Description</label>
+                  <ion-textarea v-model="form.problem_description"
+                    placeholder="Describe the machine's problem in detail..." rows="4"
+                    class="professional-textarea"></ion-textarea>
+                </div>
+
+                <!-- Complaint Nature -->
+                <ion-select v-model="form.complaint_nature" interface="alert" placeholder="Select Nature"
+                  label="Complaint Nature *" labelPlacement="floating"
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.complaint_nature }]">
                   <ion-select-option value="Major">Major Issue</ion-select-option>
                   <ion-select-option value="Minor">Minor Issue</ion-select-option>
                 </ion-select>
@@ -179,21 +133,13 @@
                   <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
                   Complaint nature is required
                 </div>
-              </div>
 
-              <!-- Ticket Type -->
-              <div class="form-field">
-                <label class="field-label">
-                  Ticket Type <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.ticket_type"
-                  interface="popover"
-                  placeholder="Select Type"
-                  class="professional-select"
+                <!-- Ticket Type -->
+
+                <ion-select v-model="form.ticket_type" interface="floating" placeholder="Select Type"
+                  label="Ticket Type *" labelPlacement="floating"
                   :disabled="form.id != '' && form.ticket_type && pop_ticket && pop_ticket.status == 'Open'"
-                  :class="{ 'field-error': submitted && !form.ticket_type }"
-                >
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.ticket_type }]">
                   <ion-select-option value="Periodic Maintenance">Periodic Maintenance</ion-select-option>
                   <ion-select-option value="Breakdown Maintenance">Breakdown Maintenance</ion-select-option>
                 </ion-select>
@@ -201,26 +147,14 @@
                   <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
                   Ticket type is required
                 </div>
-              </div>
 
-              <!-- Status During Complaint -->
-              <div class="form-field">
-                <label class="field-label">
-                  Status During Complaint <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.status_during_complaint"
-                  interface="popover"
-                  placeholder="Select Status"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && !form.status_during_complaint }"
-                >
+                <!-- Status During Complaint -->
+                <ion-select v-model="form.status_during_complaint" interface="floating" placeholder="Select Status"
+                  label="Status During Complaint *" labelPlacement="floating"
+                  :class="['border-bottom-select', { 'field-error': submitted && !form.status_during_complaint }]">
                   <ion-select-option value="Running">Running</ion-select-option>
                   <ion-select-option value="Running with problem">Running with problem</ion-select-option>
-                  <ion-select-option 
-                    value="Breakdown"
-                    v-if="form.ticket_type === 'Breakdown Maintenance'"
-                  >
+                  <ion-select-option value="Breakdown" v-if="form.ticket_type === 'Breakdown Maintenance'">
                     Breakdown
                   </ion-select-option>
                 </ion-select>
@@ -229,306 +163,235 @@
                   Status during complaint is required
                 </div>
               </div>
-            </div>
-          </div>
+            </ion-card-content>
+          </ion-card>
 
           <!-- Maintenance Provider Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <ion-icon :icon="peopleOutline" class="section-icon"></ion-icon>
-              <h2>Maintenance Provider</h2>
-            </div>
-            
-            <div class="form-grid">
-              <!-- Maintenance Provider -->
-              <div class="form-field">
-                <label class="field-label">
-                  Maintenance Provider <span class="required-indicator">*</span>
-                </label>
-                <ion-segment 
-                  v-model="form.maintenance_provider" 
-                  @ionChange="onMaintenanceProviderChange"
-                  class="professional-segment"
-                >
-                  <ion-segment-button value="vendor">
-                    <ion-icon :icon="businessOutline"></ion-icon>
-                    <ion-label>Vendor</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="user">
-                    <ion-icon :icon="personOutline"></ion-icon>
-                    <ion-label>Internal User</ion-label>
-                  </ion-segment-button>
-                </ion-segment>
+          <ion-card class="form-section">
+            <ion-card-header style="padding: 0px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <ion-icon :icon="peopleOutline" class="section-icon"></ion-icon>
+                <h5 style="margin: 0; color: black;">Maintenance Provider</h5>
               </div>
+            </ion-card-header>
+            <ion-card-content style="padding: 0px;">
 
-              <!-- Vendor Selection -->
-              <div class="form-field" v-if="form.maintenance_provider === 'vendor'">
-                <label class="field-label">
-                  Select Vendor <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.vendor_id"
-                  interface="popover"
-                  multiple
-                  placeholder="Choose Vendors"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && form.maintenance_provider === 'vendor' && !form.vendor_id.length }"
-                >
-                  <ion-select-option 
-                    v-for="user in users" 
-                    :key="user.id" 
-                    :value="user.id"
-                  >
-                    {{ user.name }}
-                  </ion-select-option>
-                </ion-select>
-                <div v-if="submitted && form.maintenance_provider === 'vendor' && !form.vendor_id.length" class="error-message">
-                  <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
-                  Vendor selection is required
+              <div class="form-grid">
+                <!-- Maintenance Provider -->
+                <div class="form-field">
+                  <!-- <label class="field-label">
+                    Maintenance Provider <span class="required-indicator">*</span>
+                  </label> -->
+                  <ion-segment v-model="form.maintenance_provider" @ionChange="onMaintenanceProviderChange"
+                    class="professional-segment">
+                    <ion-segment-button value="vendor">
+                      <span style="display: flex; align-items: center; gap: 6px;">
+                        <ion-icon :icon="businessOutline"></ion-icon>
+                        <span>Vendor</span>
+                      </span>
+                    </ion-segment-button>
+                    <ion-segment-button value="user">
+                      <span style="display: flex; align-items: center; gap: 6px;">
+                        <ion-icon :icon="personOutline"></ion-icon>
+                        <span>Internal User</span>
+                      </span>
+                    </ion-segment-button>
+                  </ion-segment>
                 </div>
-              </div>
 
-              <!-- User Selection -->
-              <div class="form-field" v-if="form.maintenance_provider === 'user'">
-                <label class="field-label">
-                  Select User <span class="required-indicator">*</span>
-                </label>
-                <ion-select
-                  v-model="form.user_id"
-                  interface="popover"
-                  placeholder="Choose User"
-                  class="professional-select"
-                  :class="{ 'field-error': submitted && form.maintenance_provider === 'user' && !form.user_id }"
-                >
-                  <ion-select-option 
-                    v-for="user in users" 
-                    :key="user.id" 
-                    :value="user.id"
-                  >
-                    {{ user.name }}
-                  </ion-select-option>
-                </ion-select>
-                <div v-if="submitted && form.maintenance_provider === 'user' && !form.user_id" class="error-message">
-                  <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
-                  User selection is required
+                <!-- Vendor Selection -->
+                <div v-if="form.maintenance_provider === 'vendor'">
+                  <ion-select v-model="form.vendor_id" interface="action-sheet" multiple placeholder="Choose Vendors"
+                    label="Select Vendor *" labelPlacement="floating"
+                    :class="['border-bottom-select', { 'field-error': submitted && form.maintenance_provider === 'vendor' && !form.vendor_id.length }]">
+                    <ion-select-option v-for="user in users" :key="user.id" :value="user.id">
+                      {{ user.name }}
+                    </ion-select-option>
+                  </ion-select>
+                  <div v-if="submitted && form.maintenance_provider === 'vendor' && !form.vendor_id.length"
+                    class="error-message">
+                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    Vendor selection is required
+                  </div>
                 </div>
-              </div>
 
-              <!-- Service Type for Vendor -->
-              <div class="form-field full-width" v-if="form.maintenance_provider === 'vendor'">
-                <label class="field-label">Service Type</label>
-                <ion-radio-group v-model="form.service_type" class="service-type-group">
-                  <div class="radio-option">
-                    <ion-radio 
-                      value="Paid Service" 
-                      :disabled="form.id != ''"
-                      class="professional-radio"
-                    ></ion-radio>
-                    <ion-label class="radio-label">
+                <!-- User Selection -->
+                <div v-if="form.maintenance_provider === 'user'">
+                  <ion-select v-model="form.user_id" interface="action-sheet" placeholder="Choose User"
+                    label="Select User *" labelPlacement="floating"
+                    :class="['border-bottom-select', { 'field-error': submitted && form.maintenance_provider === 'user' && !form.user_id }]">
+                    <ion-select-option v-for="user in users" :key="user.id" :value="user.id">
+                      {{ user.name }}
+                    </ion-select-option>
+                  </ion-select>
+                  <div v-if="submitted && form.maintenance_provider === 'user' && !form.user_id" class="error-message">
+                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    User selection is required
+                  </div>
+                </div>
+
+                <!-- Service Type for Vendor -->
+                <div class="form-field full-width" v-if="form.maintenance_provider === 'vendor'">
+                  <label class="field-label">Service Type</label>
+                  <ion-radio-group v-model="form.service_type" class="service-type-group">
+                    <div class="radio-option" style="justify-content: space-between;">
                       <div class="radio-content">
-                        <ion-icon :icon="cardOutline" class="radio-icon"></ion-icon>
+                        <ion-icon :icon="cardOutline" class="radio-icon" style="font-size: 24px;"></ion-icon>
                         <span>Paid Service</span>
                       </div>
-                    </ion-label>
-                  </div>
-                  <div class="radio-option">
-                    <ion-radio 
-                      value="Free Service" 
-                      :disabled="form.id != '' || (selected_machine && (selected_machine.completed_free_service >= selected_machine.free_service_no))"
-                      class="professional-radio"
-                    ></ion-radio>
-                    <ion-label class="radio-label">
+                      <ion-radio value="Paid Service" :disabled="form.id != ''" class="professional-radio"></ion-radio>
+                    </div>
+                    <div class="radio-option" style="justify-content: space-between; margin-top: 10px;">
                       <div class="radio-content">
-                        <ion-icon :icon="giftOutline" class="radio-icon"></ion-icon>
+                        <ion-icon :icon="giftOutline" class="radio-icon" style="font-size: 24px;"></ion-icon>
                         <span>Free Service</span>
                       </div>
-                    </ion-label>
-                  </div>
-                </ion-radio-group>
-              </div>
+                      <ion-radio value="Free Service"
+                        :disabled="form.id != '' || (selected_machine && (selected_machine.completed_free_service >= selected_machine.free_service_no))"
+                        class="professional-radio"></ion-radio>
+                    </div>
+                  </ion-radio-group>
+                </div>
 
-              <!-- Free Service Number -->
-              <div class="form-field" v-if="form.service_type === 'Free Service'">
-                <label class="field-label">Free Service Number</label>
-                <div class="service-number-display">
-                  <ion-input
-                    v-model="form.free_service_no"
-                    readonly
-                    class="professional-input"
-                  ></ion-input>
-                  <span class="service-total">/ {{ selected_machine ? selected_machine.free_service_no : '' }}</span>
+                <!-- Free Service Number -->
+                <div class="form-field" v-if="form.service_type === 'Free Service'">
+                  <label class="field-label">Free Service Number</label>
+                  <div class="service-number-display">
+                    <ion-input v-model="form.free_service_no" readonly class="professional-input"></ion-input>
+                    <span class="service-total">/ {{ selected_machine ? selected_machine.free_service_no : '' }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </ion-card-content>
+          </ion-card>
 
           <!-- Schedule & Timeline Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <ion-icon :icon="calendarOutline" class="section-icon"></ion-icon>
-              <h2>Schedule & Timeline</h2>
-            </div>
-            
-            <div class="form-grid">
-              <!-- Expected Date of Maintenance -->
-              <div class="form-field">
-                <label class="field-label">
-                  Expected Date of Maintenance <span class="required-indicator">*</span>
-                </label>
-                <ion-datetime
-                  v-model="form.likely_date"
-                  presentation="date"
-                  :min="new Date().toISOString()"
-                  :disabled="form.id != '' && form.likely_date != '' && pop_ticket && pop_ticket.status == 'Open'"
-                  class="professional-datetime"
-                  :class="{ 'field-error': submitted && !form.likely_date }"
-                ></ion-datetime>
-                <div v-if="submitted && !form.likely_date" class="error-message">
-                  <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
-                  Expected date is required
+          <ion-card class="form-section">
+            <ion-card-header style="padding: 0px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <ion-icon :icon="calendarOutline" class="section-icon"></ion-icon>
+                <h5 style="margin: 0; color: black;">Schedule & Timeline</h5>
+              </div>
+            </ion-card-header>
+            <ion-card-content style="padding: 0px;">
+
+              <div class="form-grid">
+                <!-- Expected Date of Maintenance -->
+                <div class="form-field">
+                  <label class="field-label">
+                    Expected Date of Maintenance <span class="required-indicator">*</span>
+                  </label>
+                  <ion-datetime v-model="form.likely_date" presentation="date" :min="new Date().toISOString()"
+                    :disabled="form.id != '' && form.likely_date != '' && pop_ticket && pop_ticket.status == 'Open'"
+                    class="professional-datetime"
+                    :class="{ 'field-error': submitted && !form.likely_date }"></ion-datetime>
+                  <div v-if="submitted && !form.likely_date" class="error-message">
+                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    Expected date is required
+                  </div>
+                </div>
+
+                <!-- Breakdown Date & Time -->
+                <div class="form-field"
+                  v-if="form.ticket_type === 'Breakdown Maintenance' && form.status_during_complaint === 'Breakdown'">
+                  <label class="field-label">
+                    Breakdown Date & Time <span class="required-indicator">*</span>
+                  </label>
+                  <ion-datetime v-model="form.actual_fault_date" presentation="date-time"
+                    :max="new Date().toISOString()"
+                    :disabled="form.id != '' && form.actual_fault_date != '' && pop_ticket && pop_ticket.status == 'Open'"
+                    class="professional-datetime"
+                    :class="{ 'field-error': submitted && !form.actual_fault_date }"></ion-datetime>
+                  <div v-if="submitted && !form.actual_fault_date" class="error-message">
+                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    Breakdown date is required
+                  </div>
+                </div>
+
+                <!-- Revised Expected Date -->
+                <div class="form-field" v-if="expired_likely_date && form.id">
+                  <label class="field-label">Revised Expected Date</label>
+                  <ion-datetime v-model="form.reversion_date" presentation="date" :min="new Date().toISOString()"
+                    :disabled="form.id != '' && pop_ticket.reversion_date != '' && pop_ticket.reversion_date != 'null' && pop_ticket.reversion_date != null"
+                    class="professional-datetime"></ion-datetime>
+                </div>
+
+                <!-- Reason for Date Revision -->
+                <div class="form-field" v-if="expired_likely_date && form.id">
+                  <label class="field-label">Reason for Date Revision</label>
+                  <ion-input v-model="form.reversion_reason" placeholder="Enter revision reason..."
+                    :disabled="form.id != '' && pop_ticket.reversion_date != '' && pop_ticket.reversion_date != 'null' && pop_ticket.reversion_date != null"
+                    class="professional-input"></ion-input>
                 </div>
               </div>
-
-              <!-- Breakdown Date & Time -->
-              <div 
-                class="form-field"
-                v-if="form.ticket_type === 'Breakdown Maintenance' && form.status_during_complaint === 'Breakdown'"
-              >
-                <label class="field-label">
-                  Breakdown Date & Time <span class="required-indicator">*</span>
-                </label>
-                <ion-datetime
-                  v-model="form.actual_fault_date"
-                  presentation="date-time"
-                  :max="new Date().toISOString()"
-                  :disabled="form.id != '' && form.actual_fault_date != '' && pop_ticket && pop_ticket.status == 'Open'"
-                  class="professional-datetime"
-                  :class="{ 'field-error': submitted && !form.actual_fault_date }"
-                ></ion-datetime>
-                <div v-if="submitted && !form.actual_fault_date" class="error-message">
-                  <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
-                  Breakdown date is required
-                </div>
-              </div>
-
-              <!-- Revised Expected Date -->
-              <div class="form-field" v-if="expired_likely_date && form.id">
-                <label class="field-label">Revised Expected Date</label>
-                <ion-datetime
-                  v-model="form.reversion_date"
-                  presentation="date"
-                  :min="new Date().toISOString()"
-                  :disabled="form.id != '' && pop_ticket.reversion_date != '' && pop_ticket.reversion_date != 'null' && pop_ticket.reversion_date != null"
-                  class="professional-datetime"
-                ></ion-datetime>
-              </div>
-
-              <!-- Reason for Date Revision -->
-              <div class="form-field" v-if="expired_likely_date && form.id">
-                <label class="field-label">Reason for Date Revision</label>
-                <ion-input
-                  v-model="form.reversion_reason"
-                  placeholder="Enter revision reason..."
-                  :disabled="form.id != '' && pop_ticket.reversion_date != '' && pop_ticket.reversion_date != 'null' && pop_ticket.reversion_date != null"
-                  class="professional-input"
-                ></ion-input>
-              </div>
-            </div>
-          </div>
+            </ion-card-content>
+          </ion-card>
 
           <!-- Cost Estimation Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <ion-icon :icon="calculatorOutline" class="section-icon"></ion-icon>
-              <h2>Cost Estimation</h2>
-            </div>
-            
-            <div class="cost-grid">
-              <div class="cost-card">
-                <h3>
-                  <ion-icon :icon="cubeOutline" class="cost-icon"></ion-icon>
-                  Material Cost
-                </h3>
-                <div class="form-field">
-                  <label class="field-label">Estimated Amount</label>
-                  <ion-input
-                    v-model="form.estimated_material_cost"
-                    type="number"
-                    placeholder="0.00"
-                    class="professional-input cost-input"
-                  ></ion-input>
-                </div>
+
+          <ion-card class="form-section">
+            <ion-card-header style="padding: 0px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <ion-icon :icon="calculatorOutline" class="section-icon"></ion-icon>
+                <h5 style="margin: 0; color: black;">Cost Estimation</h5>
+              </div>
+            </ion-card-header>
+            <ion-card-content style="padding: 0px;">
+
+              <div class="form-grid">
+                <ion-input v-model="form.estimated_material_cost" type="number" placeholder="0.00"
+                  label="Estimated Material Cost" label-placement="floating" class="border-bottom-select"></ion-input>
+
+
+
+
                 <div class="form-field">
                   <label class="field-label">Supporting Files</label>
                   <div class="file-upload-area">
-                    <input 
-                      type="file" 
-                      @change="uploadMaterialCost" 
-                      multiple
-                      ref="filematerial"
-                      class="file-input"
-                      id="material-files"
-                    />
+                    <input type="file" @change="uploadMaterialCost" multiple ref="filematerial" class="file-input"
+                      id="material-files" />
                     <label for="material-files" class="file-upload-label">
                       <ion-icon :icon="cloudUploadOutline" class="upload-icon"></ion-icon>
                       <span>Upload Files</span>
                     </label>
                   </div>
                 </div>
-              </div>
 
-              <div class="cost-card">
-                <h3>
-                  <ion-icon :icon="constructOutline" class="cost-icon"></ion-icon>
-                  Service Cost
-                </h3>
-                <div class="form-field">
-                  <label class="field-label">Estimated Amount</label>
-                  <ion-input
-                    v-model="form.estimated_service_cost"
-                    type="number"
-                    placeholder="0.00"
-                    class="professional-input cost-input"
-                  ></ion-input>
-                </div>
+                <ion-input v-model="form.estimated_service_cost" type="number" placeholder="0.00"
+                  label="Estimated Service Cost" label-placement="floating" class="border-bottom-select"></ion-input>
+
                 <div class="form-field">
                   <label class="field-label">Supporting Files</label>
                   <div class="file-upload-area">
-                    <input 
-                      type="file" 
-                      @change="uploadServiceCost" 
-                      multiple
-                      ref="fileservice"
-                      class="file-input"
-                      id="service-files"
-                    />
+                    <input type="file" @change="uploadServiceCost" multiple ref="fileservice" class="file-input"
+                      id="service-files" />
                     <label for="service-files" class="file-upload-label">
                       <ion-icon :icon="cloudUploadOutline" class="upload-icon"></ion-icon>
                       <span>Upload Files</span>
                     </label>
                   </div>
                 </div>
+
+
               </div>
-            </div>
-          </div>
+
+
+
+            </ion-card-content>
+          </ion-card>
 
           <!-- Stages Section (Edit Mode) -->
           <div class="form-section" v-if="form.id">
             <div class="section-header">
               <ion-icon :icon="listOutline" class="section-icon"></ion-icon>
               <h2>Project Stages</h2>
-              <ion-button 
-                @click="AddStage" 
-                fill="outline"
-                size="small"
-                class="add-stage-btn"
-                :disabled="form.stages.length > 0 && !last_stage_index && !last_stage_date"
-              >
+              <ion-button @click="AddStage" fill="outline" size="small" class="add-stage-btn"
+                :disabled="form.stages.length > 0 && !last_stage_index && !last_stage_date">
                 <ion-icon :icon="addOutline" slot="start"></ion-icon>
                 Add Stage
               </ion-button>
             </div>
-            
+
             <div class="stages-container">
               <div class="stages-header">
                 <div class="stage-col">Stage</div>
@@ -536,50 +399,28 @@
                 <div class="stage-col">Description</div>
                 <div class="stage-col-action">Action</div>
               </div>
-              
+
               <div v-for="(field, x) in form.stages" :key="'s' + x" class="stage-row">
                 <div class="stage-col">
-                  <ion-select
-                    v-model="field.stage_no"
-                    :disabled="x < form.stages.length - 1"
-                    interface="popover"
-                    placeholder="Select stage"
-                    class="professional-select stage-select"
-                  >
-                    <ion-select-option 
-                      v-for="(stg, index) in opn_stage" 
-                      :key="index" 
-                      :value="stg"
-                      :disabled="index < last_stage_index"
-                    >
+                  <ion-select v-model="field.stage_no" :disabled="x < form.stages.length - 1" interface="popover"
+                    placeholder="Select stage" class="professional-select stage-select">
+                    <ion-select-option v-for="(stg, index) in opn_stage" :key="index" :value="stg"
+                      :disabled="index < last_stage_index">
                       {{ stg | camelCase }}
                     </ion-select-option>
                   </ion-select>
                 </div>
                 <div class="stage-col">
-                  <ion-datetime
-                    v-model="field.stage_date"
-                    presentation="date"
-                    :min="last_stage_date"
-                    :max="new Date().toISOString()"
-                    class="professional-datetime stage-datetime"
-                  ></ion-datetime>
+                  <ion-datetime v-model="field.stage_date" presentation="date" :min="last_stage_date"
+                    :max="new Date().toISOString()" class="professional-datetime stage-datetime"></ion-datetime>
                 </div>
                 <div class="stage-col">
-                  <ion-input
-                    v-model="field.description"
-                    placeholder="Enter Description"
-                    class="professional-input stage-input"
-                  ></ion-input>
+                  <ion-input v-model="field.description" placeholder="Enter Description"
+                    class="professional-input stage-input"></ion-input>
                 </div>
                 <div class="stage-col-action">
-                  <ion-button 
-                    @click="form.stages.splice(x, 1)" 
-                    v-if="form.stages.length == x + 1"
-                    fill="clear"
-                    color="danger"
-                    size="small"
-                  >
+                  <ion-button @click="form.stages.splice(x, 1)" v-if="form.stages.length == x + 1" fill="clear"
+                    color="danger" size="small">
                     <ion-icon :icon="trashOutline" slot="icon-only"></ion-icon>
                   </ion-button>
                 </div>
@@ -592,17 +433,12 @@
             <div class="section-header">
               <ion-icon :icon="addCircleOutline" class="section-icon"></ion-icon>
               <h2>Additional Problems</h2>
-              <ion-button 
-                @click="AddProblem" 
-                fill="outline"
-                size="small"
-                class="add-problem-btn"
-              >
+              <ion-button @click="AddProblem" fill="outline" size="small" class="add-problem-btn">
                 <ion-icon :icon="addOutline" slot="start"></ion-icon>
                 Add Problem
               </ion-button>
             </div>
-            
+
             <div class="problems-container">
               <div class="problems-header">
                 <div class="problem-col">Problem Description</div>
@@ -610,38 +446,22 @@
                 <div class="problem-col">Service Cost</div>
                 <div class="problem-col-action">Action</div>
               </div>
-              
+
               <div v-for="(field, x) in form.problems" :key="'ap' + x" class="problem-row">
                 <div class="problem-col">
-                  <ion-input
-                    v-model="field.problem"
-                    placeholder="Describe the problem..."
-                    class="professional-input problem-input"
-                  ></ion-input>
+                  <ion-input v-model="field.problem" placeholder="Describe the problem..."
+                    class="professional-input problem-input"></ion-input>
                 </div>
                 <div class="problem-col">
-                  <ion-input
-                    v-model="field.estimated_material_cost"
-                    type="number"
-                    placeholder="0.00"
-                    class="professional-input cost-input"
-                  ></ion-input>
+                  <ion-input v-model="field.estimated_material_cost" type="number" placeholder="0.00"
+                    class="professional-input cost-input"></ion-input>
                 </div>
                 <div class="problem-col">
-                  <ion-input
-                    v-model="field.estimated_service_cost"
-                    type="number"
-                    placeholder="0.00"
-                    class="professional-input cost-input"
-                  ></ion-input>
+                  <ion-input v-model="field.estimated_service_cost" type="number" placeholder="0.00"
+                    class="professional-input cost-input"></ion-input>
                 </div>
                 <div class="problem-col-action">
-                  <ion-button 
-                    @click="form.problems.splice(x, 1)" 
-                    fill="clear"
-                    color="danger"
-                    size="small"
-                  >
+                  <ion-button @click="form.problems.splice(x, 1)" fill="clear" color="danger" size="small">
                     <ion-icon :icon="trashOutline" slot="icon-only"></ion-icon>
                   </ion-button>
                 </div>
@@ -651,14 +471,8 @@
 
           <!-- Submit Actions -->
           <div class="form-actions">
-            <ion-button 
-              expand="block" 
-              type="submit" 
-              class="submit-btn"
-              :disabled="isSaving"
-              size="large"
-            >
-              <ion-spinner v-if="isSaving" name="crescent" class="submit-spinner"></ion-spinner>
+            <ion-button expand="block" type="submit" :disabled="isSaving" size="large">
+              <ion-spinner v-if="isSaving" name="crescent"></ion-spinner>
               <ion-icon v-else :icon="form.id ? saveOutline : addOutline" slot="start"></ion-icon>
               <span v-if="!isSaving">{{ form.id ? 'Update Ticket' : 'Create Ticket' }}</span>
             </ion-button>
@@ -672,13 +486,13 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { 
+import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons,
-  IonItem, IonLabel, IonInput, IonTextarea, IonSelect, IonSelectOption, 
+  IonItem, IonLabel, IonInput, IonTextarea, IonSelect, IonSelectOption,
   IonButton, IonMenuButton, IonSpinner, IonRadio, IonRadioGroup,
   IonDatetime, IonIcon, IonSegment, IonSegmentButton, toastController
 } from '@ionic/vue';
-import { 
+import {
   ticketOutline as ticketIcon, refreshOutline, settingsOutline, bugOutline,
   peopleOutline, businessOutline, personOutline, calendarOutline,
   calculatorOutline, cubeOutline, constructOutline, cloudUploadOutline,
@@ -765,18 +579,18 @@ const sub_categories = ref<any[]>([]);
 const users = ref<any[]>([]);
 const machines = ref<any[]>([]);
 const opn_stage = ref([
-  'Vendor Exploration & RFQ Initiated', 
-  'Vendor created', 
-  'Vendor Assigned', 
-  'Sent for Approval', 
-  'Approval Receipt', 
-  'Order issued', 
-  'Payment under process', 
-  'Payment Done', 
-  'Logistics under process', 
-  'Materials despatched', 
-  'Material received at site', 
-  'Maintainace under progress', 
+  'Vendor Exploration & RFQ Initiated',
+  'Vendor created',
+  'Vendor Assigned',
+  'Sent for Approval',
+  'Approval Receipt',
+  'Order issued',
+  'Payment under process',
+  'Payment Done',
+  'Logistics under process',
+  'Materials despatched',
+  'Material received at site',
+  'Maintainace under progress',
   'Job Completed'
 ]);
 const last_stage_index = ref(0);
@@ -829,7 +643,7 @@ const onMaintenanceProviderChange = () => {
   if (form.value.maintenance_provider === 'user' && form.value.maintenance_provider === 'vendor') {
     form.value.vendor_id = [];
   }
-  
+
   api.get("api/ticket-user/list", {
     params: {
       type: form.value.maintenance_provider
@@ -884,7 +698,7 @@ const get_machine = async () => {
   if (form.value.id === '') {
     form.value.machine_id = '';
   }
-  
+
   api.get("/api/ticket_machine-app", {
     params: {
       site_id: form.value.site_id,
@@ -909,7 +723,7 @@ const fetch_site_category = async (machine_id: string) => {
         const current_site = response.data.data.data[0].current_site;
         form.value.site_id = current_site.id;
         form.value.category_id = response.data.data.data[0].category_id;
-        
+
         setTimeout(() => {
           form.value.sub_category_id = response.data.data.data[0].sub_category_id;
         }, 1000);
@@ -920,12 +734,12 @@ const fetch_site_category = async (machine_id: string) => {
 
 const submitTicket = async () => {
   submitted.value = true;
-  form.value.login_user_id=JSON.parse(localStorage.getItem('user')).id;
-  
+  form.value.login_user_id = JSON.parse(localStorage.getItem('user')).id;
+
   // Basic validation
-  if (!form.value.site_id || !form.value.category_id || !form.value.sub_category_id || 
-      !form.value.machine_id || !form.value.complaint_nature || !form.value.maintenance_provider ||
-      !form.value.ticket_type || !form.value.status_during_complaint || !form.value.likely_date) {
+  if (!form.value.site_id || !form.value.category_id || !form.value.sub_category_id ||
+    !form.value.machine_id || !form.value.complaint_nature || !form.value.maintenance_provider ||
+    !form.value.ticket_type || !form.value.status_during_complaint || !form.value.likely_date) {
     const toast = await toastController.create({
       message: 'Please fill in all required fields',
       duration: 3000,
@@ -1052,10 +866,22 @@ const resetForm = () => {
 
 // Initialize form data
 onMounted(() => {
+  resetForm();
+
+  selected_machine.value = null;
+  pop_ticket.value = null;
+  expired_likely_date.value = false;
+  machines.value = [];
+  sub_categories.value = [];
+  users.value = [];
+
+
   // Load initial data
   api.get("https://dummymm.tech-trico.com/api/get_pre_machine-app").then((res) => {
     categories.value = res.data.data.Category;
     sites.value = res.data.data.sites;
+
+    onMaintenanceProviderChange();
   });
 
   if (!route.params.id) {
@@ -1077,7 +903,7 @@ onMounted(() => {
           actual_fault_date: ticket.actual_ticket_open_datetime ? new Date(ticket.actual_ticket_open_datetime).toISOString() : '',
           vendor_id: ticket.allocated_vendors.map((g: any) => g.id),
         };
-        
+
         if (ticket.stages && ticket.stages.length > 0) {
           form.value.stages = ticket.stages;
         }
@@ -1128,23 +954,21 @@ const camelCase = (value: string) => {
 </script>
 
 <style scoped>
-/* Grey Yellow Professional Styling */
+/* Clean Professional Styling */
 * {
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Header Styles */
 .professional-header {
-  --background: #f8f9fa;
+  --background: #ffffff;
 }
 
 .header-toolbar {
-  --background: #f8f9fa;
-  --color: #2c3e50;
+  --background: #ffffff;
+  --color: #1f2937;
   padding: 8px 16px;
   height: 60px;
-  border-bottom: 2px solid #7d6412;
 }
 
 .title-container {
@@ -1153,26 +977,22 @@ const camelCase = (value: string) => {
   gap: 8px;
   font-weight: 600;
   font-size: 18px;
-  color: #2c3e50;
 }
 
 .title-icon {
-  color: #7d6412;
+  color: #3b82f6;
   font-size: 20px;
 }
 
 .reset-btn {
-  --color: #7f8c8d;
-  --border-color: #bdc3c7;
-  --background-hover: #7d6412;
-  --color-hover: #2c3e50;
+  --color: #6b7280;
+  --border-color: #d1d5db;
   font-size: 14px;
 }
 
 /* Content Layout */
 .professional-content {
-  --background: #ecf0f1;
-  padding-bottom: 20px;
+  --background: #f8fafc;
 }
 
 .form-container {
@@ -1184,7 +1004,6 @@ const camelCase = (value: string) => {
 .professional-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 
 /* Form Sections */
@@ -1192,9 +1011,8 @@ const camelCase = (value: string) => {
   background: #ffffff;
   border-radius: 8px;
   padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid #bdc3c7;
-  border-left: 4px solid #7d6412;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
 }
 
 .section-header {
@@ -1203,7 +1021,7 @@ const camelCase = (value: string) => {
   justify-content: space-between;
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 2px solid #e5e7eb;
 }
 
 .section-header h2 {
@@ -1213,11 +1031,11 @@ const camelCase = (value: string) => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1f2937;
 }
 
 .section-icon {
-  color: #7d6412;
+  color: #3b82f6;
   font-size: 20px;
 }
 
@@ -1240,51 +1058,40 @@ const camelCase = (value: string) => {
 
 /* Labels */
 .field-label {
-  font-weight: 600;
-  color: #34495e;
+  font-weight: 500;
+  color: #374151;
   font-size: 14px;
   margin-bottom: 4px;
 }
 
 .required-indicator {
-  color: #e74c3c;
+  color: #dc2626;
 }
 
-/* Input Styles */
+/* Input Styles - Simplified */
 .professional-input,
 .professional-select,
 .professional-textarea,
 .professional-datetime {
-  background: #f8f9fa !important;
-  border: 2px solid #bdc3c7 !important;
-  border-radius: 6px !important;
-  padding: 12px !important;
-  font-size: 14px !important;
-  color: #2c3e50 !important;
-  transition: all 0.3s ease;
-}
-
-.professional-input:hover,
-.professional-select:hover,
-.professional-textarea:hover,
-.professional-datetime:hover {
-  border-color: #95a5a6 !important;
   background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  color: #1f2937 !important;
 }
 
 .professional-input:focus,
 .professional-select:focus,
 .professional-textarea:focus,
 .professional-datetime:focus {
-  border-color: #7d6412 !important;
-  background: #fffdf0 !important;
+  border-color: #3b82f6 !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
 .field-error {
-  border-color: #e74c3c !important;
-  background: #fdf2f2 !important;
+  border-color: #dc2626 !important;
 }
 
 /* Error Messages */
@@ -1292,10 +1099,9 @@ const camelCase = (value: string) => {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #e74c3c;
+  color: #dc2626;
   font-size: 12px;
   margin-top: 4px;
-  font-weight: 500;
 }
 
 .error-icon {
@@ -1304,21 +1110,18 @@ const camelCase = (value: string) => {
 
 /* Segment Control */
 .professional-segment {
-  background: #ecf0f1 !important;
-  border-radius: 8px !important;
-  border: 2px solid #bdc3c7 !important;
+  background: #f3f4f6 !important;
+  border-radius: 6px !important;
   overflow: hidden;
 }
 
 .professional-segment ion-segment-button {
-  --color: #7f8c8d;
-  --color-checked: #2c3e50;
+  --color: #6b7280;
+  --color-checked: #ffffff;
   --background: transparent;
-  --background-checked: #7d6412;
-  margin: 2px;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  --background-checked: #3b82f6;
+  /* border-radius: 4px; */
+  font-weight: 500;
 }
 
 /* Radio Buttons */
@@ -1332,31 +1135,29 @@ const camelCase = (value: string) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 16px;
-  background: #f8f9fa;
-  border: 2px solid #bdc3c7;
-  border-radius: 8px;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
   flex: 1;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .radio-option:hover {
-  background: #fffdf0;
-  border-color: #7d6412;
-  transform: translateY(-1px);
+  background: #f3f4f6;
+  border-color: #3b82f6;
 }
 
 .radio-content {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-weight: 600;
-  color: #2c3e50;
+  font-weight: 500;
+  color: #374151;
 }
 
 .radio-icon {
-  color: #7d6412;
+  color: #3b82f6;
   font-size: 16px;
 }
 
@@ -1364,121 +1165,280 @@ const camelCase = (value: string) => {
 .service-number-display {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .service-total {
+  font-weight: 500;
+  color: #6b7280;
   font-size: 14px;
-  color: #7f8c8d;
 }
 
 /* Cost Cards */
 .cost-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
 }
 
 .cost-card {
-  background: #fefefe;
-  border: 2px solid #bdc3c7;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 16px;
+  padding: 20px;
 }
 
 .cost-card h3 {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 0 0 16px 0;
   font-size: 16px;
-  color: #2c3e50;
   font-weight: 600;
-  margin-bottom: 12px;
+  color: #1f2937;
 }
 
 .cost-icon {
-  color: #7d6412;
+  color: #3b82f6;
   font-size: 18px;
 }
 
-.file-upload-area {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.cost-input {
+  background: #ffffff !important;
 }
 
+/* File Upload */
 .file-input {
   display: none;
+  /* border-bottom: 1px solid #d1d5db; */
 }
 
 .file-upload-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: #ecf0f1;
-  border: 2px solid #bdc3c7;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 2px dashed #d1d5db;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  color: #2c3e50;
+  color: #6b7280;
+  transition: all 0.2s;
 }
 
 .file-upload-label:hover {
-  background: #fffdf0;
-  border-color: #7d6412;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #f0f9ff;
 }
 
 .upload-icon {
-  color: #7d6412;
+  font-size: 16px;
 }
 
-/* Stages & Problems Tables */
+/* Tables */
 .stages-container,
 .problems-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
 }
 
 .stages-header,
 .problems-header {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  background: #f3f4f6;
+  padding: 12px 16px;
   font-weight: 600;
-  background: #ecf0f1;
-  padding: 8px 12px;
-  border-radius: 6px;
+  font-size: 14px;
+  color: #1f2937;
+  display: grid;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.stage-col,
-.problem-col {
-  padding: 4px 8px;
+.stages-header {
+  grid-template-columns: 2fr 1fr 2fr 80px;
 }
 
-.stage-col-action,
-.problem-col-action {
-  display: flex;
-  justify-content: center;
+.problems-header {
+  grid-template-columns: 2fr 1fr 1fr 80px;
+}
+
+.stage-row,
+.problem-row {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  display: grid;
   align-items: center;
+  gap: 16px;
 }
 
-/* Action Buttons */
+.stage-row {
+  grid-template-columns: 2fr 1fr 2fr 80px;
+}
+
+.problem-row {
+  grid-template-columns: 2fr 1fr 1fr 80px;
+}
+
+.stage-row:last-child,
+.problem-row:last-child {
+  border-bottom: none;
+}
+
+.stage-select,
+.stage-input,
+.stage-datetime,
+.problem-input {
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 4px !important;
+  padding: 8px 10px !important;
+  font-size: 13px !important;
+}
+
+/* Buttons */
 .add-stage-btn,
 .add-problem-btn {
+  --color: #3b82f6;
+  --border-color: #3b82f6;
   font-size: 14px;
-  --color: #2c3e50;
-  --border-color: #7d6412;
+  font-weight: 500;
 }
 
 .submit-btn {
-  --background: #7d6412;
-  --color: #f4f5f5;
-  font-weight: 600;
-  font-size: 16px;
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  margin-top: 20px !important;
+  height: 56px !important;
+}
+
+.submit-btn:hover {
+  background: #2563eb !important;
 }
 
 .submit-spinner {
   margin-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 16px;
+  }
+
+  .form-section {
+    padding: 16px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .cost-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-type-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stages-header,
+  .stage-row,
+  .problems-header,
+  .problem-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stages-header,
+  .problems-header {
+    text-align: center;
+  }
+}
+
+/* Ionic overrides for better visibility */
+ion-item {
+  --background: transparent;
+  --border-color: transparent;
+  --inner-border-width: 0;
+  --min-height: auto;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+ion-select,
+ion-input,
+ion-textarea,
+ion-datetime {
+  --background: #ffffff;
+  --color: #1f2937;
+  --placeholder-color: #9ca3af;
+}
+
+/* Clean up any ionic defaults that might interfere */
+.form-field ion-select,
+.form-field ion-input,
+.form-field ion-textarea,
+.form-field ion-datetime {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+}
+
+.form-field ion-select:hover,
+.form-field ion-input:hover,
+.form-field ion-textarea:hover,
+.form-field ion-datetime:hover {
+  border-color: #9ca3af;
+}
+
+.form-field ion-select.ion-focused,
+.form-field ion-input.ion-focused,
+.form-field ion-textarea.ion-focused,
+.form-field ion-datetime.ion-focused {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.label-text-wrapper {
+  color: black !important;
+}
+
+.border-bottom-select {
+  border-bottom: 1px solid #d1d5db !important;
+  color: #374151;
+  font-weight: 500;
+}
+
+
+
+ion-select::part(placeholder),
+ion-select::part(text) {
+  white-space: normal;
+}
+
+.action-sheet-group.sc-ion-action-sheet-md,
+.alert-radio-group.sc-ion-alert-md,
+.alert-checkbox-group.sc-ion-alert-md {
+  max-height: 250px !important; /* adjust as needed */
+  overflow-y: auto !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
@@ -20,34 +20,212 @@
     <ion-content>
       <!-- Ticket List -->
       <ion-list v-if="!loading && tickets.data && tickets.data.length > 0">
-        <ion-card v-for="ticket in tickets.data" :key="ticket.id" class="ticket-card" @click="viewTicket(ticket)">
+        <ion-card
+          v-for="ticket in tickets.data"
+          :key="ticket.id"
+          class="ticket-card"
+          @click="viewTicket(ticket)"
+        >
           <ion-card-header>
-            <ion-card-title><strong>{{ ticket.ticket_no }}</strong></ion-card-title>
+            <ion-card-title>
+              <ion-icon
+                :icon="documentText"
+                style="vertical-align: middle; margin-right: 8px;"
+              />
+              <strong>{{ ticket.ticket_no }}</strong>
+            </ion-card-title>
             <ion-chip :color="getStatusColor(ticket.status)" class="status-chip">
               <ion-label>{{ ticket.status }}</ion-label>
             </ion-chip>
           </ion-card-header>
 
-          <ion-card-content>
-            <p><strong>Machine:</strong> {{ ticket.machine.name }} ({{ ticket.machine.far_no }})</p>
-            <p><strong>Problem:</strong> {{ truncateText(ticket.problem_description, 50) }}</p>
-            <p><strong>Site:</strong> {{ ticket.site ? ticket.site.site_name : '-' }}</p>
-            <p><strong>Created:</strong> {{ formatDate(ticket.created_at) }}</p>
+          <ion-card-content class="ticket-summary-content">
+            <div class="ticket-summary-row">
+              <span class="summary-label">Machine:</span>
+              <span class="summary-value"
+                >{{ ticket.machine.name }} ({{ ticket.machine.far_no }})</span
+              >
+            </div>
+            <div class="ticket-summary-row">
+              <span class="summary-label">Problem:</span>
+              <span class="summary-value">{{
+                truncateText(ticket.problem_description, 40)
+              }}</span>
+            </div>
+            <div class="ticket-summary-row">
+              <span class="summary-label">Site:</span>
+              <span class="summary-value">{{
+                ticket.site ? ticket.site.site_name : "-"
+              }}</span>
+            </div>
+            <div class="ticket-summary-row">
+              <span class="summary-label">Created:</span>
+              <span class="summary-value">{{ formatDate(ticket.created_at) }}</span>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-list>
 
       <!-- Empty State -->
-      <div v-if="!loading && (!tickets.data || tickets.data.length === 0)" class="empty-state">
+      <div
+        v-if="!loading && (!tickets.data || tickets.data.length === 0)"
+        class="empty-state"
+      >
         <ion-icon :icon="documentText" size="large"></ion-icon>
         <p>No tickets found</p>
-        <ion-button fill="clear" @click="navigateToAddTicket">Create your first ticket</ion-button>
+        <ion-button fill="clear" @click="navigateToAddTicket"
+          >Create your first ticket</ion-button
+        >
       </div>
+
+      <!-- Pagination -->
+      <ion-footer v-if="tickets.data && tickets.data.length > 0">
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button
+              shape="round"
+              color="light"
+              :disabled="!tickets.prev_page_url"
+              @click="changePage(tickets.current_page - 1)"
+            >
+              Prev
+            </ion-button>
+          </ion-buttons>
+
+          <div class="pagination-numbers">
+            <ion-button
+              v-for="page in getPageNumbers"
+              :key="page"
+              shape="round"
+              size="small"
+              :fill="tickets.current_page === page ? 'solid' : 'outline'"
+              color="primary"
+              @click="changePage(page)"
+            >
+              {{ page }}
+            </ion-button>
+          </div>
+
+          <ion-buttons slot="end">
+            <ion-button
+              shape="round"
+              color="light"
+              :disabled="!tickets.next_page_url"
+              @click="changePage(tickets.current_page + 1)"
+            >
+              Next
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+
+      <!-- Filter Modal -->
+      <ion-modal :is-open="filterModalOpen" @didDismiss="filterModalOpen = false">
+        <ion-header>
+          <ion-toolbar color="primary">
+            <ion-title>Filter Tickets</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="filterModalOpen = false">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-accordion-group>
+            <ion-accordion value="dateFilters">
+              <ion-item slot="header"><ion-label>Date Filters</ion-label></ion-item>
+              <div class="ion-padding" slot="content">
+                <ion-item>
+                  <ion-label position="stacked">Date From</ion-label>
+                  <ion-datetime v-model="search.date_from" presentation="date" />
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Date To</ion-label>
+                  <ion-datetime v-model="search.date_to" presentation="date" />
+                </ion-item>
+              </div>
+            </ion-accordion>
+
+            <ion-accordion value="machineFilters">
+              <ion-item slot="header"
+                ><ion-label>Machine / Site</ion-label></ion-item
+              >
+              <div class="ion-padding" slot="content">
+                <ion-item>
+                  <ion-label position="stacked">Machine</ion-label>
+                  <ion-select v-model="search.machine_id" placeholder="Select machine">
+                    <ion-select-option
+                      v-for="m in search_machines"
+                      :key="m.id"
+                      :value="m.id"
+                      >{{ m.far_no }} - {{ m.name }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Site</ion-label>
+                  <ion-select v-model="search.site_id" placeholder="Select site">
+                    <ion-select-option
+                      v-for="s in search_sites"
+                      :key="s.id"
+                      :value="s.id"
+                      >{{ s.site_name }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-item>
+              </div>
+            </ion-accordion>
+
+            <ion-accordion value="statusFilters">
+              <ion-item slot="header"
+                ><ion-label>Status / Type</ion-label></ion-item
+              >
+              <div class="ion-padding" slot="content">
+                <ion-item>
+                  <ion-label position="stacked">Status</ion-label>
+                  <ion-select v-model="search.status" placeholder="Select status">
+                    <ion-select-option value="Open">Open</ion-select-option>
+                    <ion-select-option value="Closed">Closed</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Maintenance Type</ion-label>
+                  <ion-select
+                    v-model="search.ticket_type"
+                    placeholder="Select type"
+                  >
+                    <ion-select-option value="Breakdown Maintenance"
+                      >Breakdown Maintenance</ion-select-option
+                    >
+                    <ion-select-option value="Periodic Maintenance"
+                      >Periodic Maintenance</ion-select-option
+                    >
+                  </ion-select>
+                </ion-item>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+
+          <ion-grid class="ion-margin-top">
+            <ion-row>
+              <ion-col size="6">
+                <ion-button expand="block" color="primary" @click="applyFilters"
+                  >Apply</ion-button
+                >
+              </ion-col>
+              <ion-col size="6">
+                <ion-button expand="block" color="medium" @click="resetFilters"
+                  >Reset</ion-button
+                >
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-content>
+      </ion-modal>
 
       <!-- Ticket Detail Modal -->
       <ion-modal :is-open="viewModalOpen" @didDismiss="closeViewModal">
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color="primary">
             <ion-title>Ticket Details</ion-title>
             <ion-buttons slot="end">
               <ion-button @click="closeViewModal">Close</ion-button>
@@ -55,66 +233,29 @@
           </ion-toolbar>
         </ion-header>
 
-        <ion-content class="ion-padding" v-if="selectedTicket">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>{{ selectedTicket.ticket_no }}</ion-card-title>
-              <ion-chip :color="getStatusColor(selectedTicket.status)">
-                <ion-label>{{ selectedTicket.status }}</ion-label>
-              </ion-chip>
-            </ion-card-header>
-            <ion-card-content>
-              <p><strong>Machine:</strong> {{ selectedTicket.machine.name }} ({{ selectedTicket.machine.far_no }})</p>
-              <p><strong>Problem:</strong> {{ selectedTicket.problem_description }}</p>
-              <p><strong>Site:</strong> {{ selectedTicket.site?.site_name || '-' }}</p>
-              <p><strong>Created:</strong> {{ formatDate(selectedTicket.created_at) }}</p>
-            </ion-card-content>
-          </ion-card>
-
-          <ion-list>
-            <ion-item>
-              <ion-label>Current Run Hour</ion-label>
-              <ion-text>{{ selectedTicket.current_run_hour || '-' }}</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Production Loss</ion-label>
-              <ion-text>{{ selectedTicket.production_loss || '-' }}</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Production Loss Amount</ion-label>
-              <ion-text>{{ selectedTicket.production_loss_amount || '-' }}</ion-text>
-            </ion-item>
-          </ion-list>
-
-          <!-- Stages -->
-          <ion-card v-if="selectedTicket.stages && selectedTicket.stages.length > 0">
-            <ion-card-header>
-              <ion-card-title>Stages</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list>
-                <ion-item v-for="(stage, index) in selectedTicket.stages" :key="index">
-                  <ion-label>
-                    <h3>Stage {{ stage.stage_no }}</h3>
-                    <p>{{ stage.stage_date }} - {{ stage.description }}</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Cost Details -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Cost Details</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p><strong>Estimated Material Cost:</strong> {{ selectedTicket.estimated_material_cost || 0 }}</p>
-              <p><strong>Estimated Service Cost:</strong> {{ selectedTicket.estimated_service_cost || 0 }}</p>
-              <p><strong>Actual Material Cost:</strong> {{ selectedTicket.actual_material_cost || 0 }}</p>
-              <p><strong>Actual Service Cost:</strong> {{ selectedTicket.actual_service_cost || 0 }}</p>
-            </ion-card-content>
-          </ion-card>
+        <ion-content v-if="selectedTicket">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon
+                :icon="documentText"
+                style="vertical-align: middle; margin-right: 8px;"
+                color="primary"
+              />
+              {{ selectedTicket.ticket_no }}
+            </ion-card-title>
+            <ion-chip
+              :color="getStatusColor(selectedTicket.status)"
+              class="status-chip"
+            >
+              <ion-label>{{ selectedTicket.status }}</ion-label>
+            </ion-chip>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Machine:</strong> {{ selectedTicket.machine.name }}</p>
+            <p><strong>Problem:</strong> {{ selectedTicket.problem_description }}</p>
+            <p><strong>Site:</strong> {{ selectedTicket.site?.site_name || '-' }}</p>
+            <p><strong>Created:</strong> {{ formatDate(selectedTicket.created_at) }}</p>
+          </ion-card-content>
         </ion-content>
       </ion-modal>
     </ion-content>
@@ -122,249 +263,134 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from "vue";
 import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-  IonLabel, IonMenuButton, IonButton, IonChip, IonIcon, IonModal, IonText, IonItem
-} from '@ionic/vue';
-import { add, documentText, refresh, filter } from 'ionicons/icons';
-import axios from 'axios';
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton,
+  IonButton, IonIcon, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardContent,
+  IonChip, IonLabel, IonModal, IonSelect, IonSelectOption, IonItem, IonDatetime,
+  IonGrid, IonRow, IonCol, IonAccordion, IonAccordionGroup, toastController
+} from "@ionic/vue";
+import { documentText, refresh, filter } from "ionicons/icons";
+import axios from "axios";
 
-interface Machine { id: number; far_no: string; name: string; }
-interface Site { id: number; site_name: string; }
-interface Ticket { id: number; ticket_no: string; status: string; problem_description: string; created_at: string; machine: Machine; site: Site; stages?: any[]; estimated_material_cost?: number; estimated_service_cost?: number; actual_material_cost?: number; actual_service_cost?: number; current_run_hour?: number; production_loss?: number; production_loss_amount?: number; }
-interface TicketsResponse { current_page: number; data: Ticket[]; last_page: number; next_page_url: string | null; prev_page_url: string | null; }
-
-const router = useRouter();
 const loading = ref(true);
-const tickets = ref<TicketsResponse>({} as TicketsResponse);
+const filterModalOpen = ref(false);
 const viewModalOpen = ref(false);
-const selectedTicket = ref<Ticket | null>(null);
+const tickets = ref<any>({});
+const selectedTicket = ref<any>(null);
+const search_machines = ref<any[]>([]);
+const search_sites = ref<any[]>([]);
 
-onMounted(() => { loadTickets(); });
+const search = ref({
+  page: 1,
+  machine_id: "",
+  site_id: "",
+  ticket_type: "",
+  ticket: "",
+  date_from: "",
+  date_to: "",
+  status: "",
+});
 
-const api = axios.create({ baseURL: 'https://dummymm.tech-trico.com', timeout: 10000 });
+onMounted(() => {
+  loadTickets();
+  loadInitialData();
+});
+
+const api = axios.create({
+  baseURL: "https://dummymm.tech-trico.com",
+  timeout: 10000,
+});
 
 const loadTickets = async () => {
   try {
     loading.value = true;
-    const response = await api.get("/api/ticket-app");
+    const response = await api.get("/api/ticket-app", { params: search.value });
     tickets.value = response.data.data;
-  } catch {
-    console.error("Failed to load tickets");
+  } catch (error) {
+    console.error(error);
   } finally {
     loading.value = false;
   }
 };
 
-const viewTicket = (ticket: Ticket) => {
+const loadInitialData = async () => {
+  try {
+    const response = await axios.get("/api/initial_ticket");
+    search_machines.value = response.data.data.machines;
+    search_sites.value = response.data.data.sites;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getPageNumbers = computed(() => {
+  const totalPages = tickets.value.last_page || 1;
+  const currentPage = tickets.value.current_page || 1;
+  const maxPages = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+  let endPage = Math.min(totalPages, startPage + maxPages - 1);
+  if (endPage - startPage + 1 < maxPages) {
+    startPage = Math.max(1, endPage - maxPages + 1);
+  }
+  return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+});
+
+const formatDate = (dateString: string) =>
+  dateString
+    ? new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "-";
+
+const truncateText = (text: string, maxLength: number) =>
+  text?.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+
+const getStatusColor = (status: string) =>
+  status.toLowerCase() === "open"
+    ? "warning"
+    : status.toLowerCase() === "closed"
+    ? "success"
+    : "medium";
+
+const openFilterModal = () => (filterModalOpen.value = true);
+const applyFilters = () => {
+  search.value.page = 1;
+  filterModalOpen.value = false;
+  loadTickets();
+};
+const resetFilters = () => {
+  search.value = {
+    page: 1,
+    machine_id: "",
+    site_id: "",
+    ticket_type: "",
+    ticket: "",
+    date_from: "",
+    date_to: "",
+    status: "",
+  };
+  filterModalOpen.value = false;
+  loadTickets();
+};
+const changePage = (page: number) => {
+  search.value.page = page;
+  loadTickets();
+};
+
+const viewTicket = (ticket: any) => {
   selectedTicket.value = ticket;
   viewModalOpen.value = true;
 };
-
 const closeViewModal = () => {
   viewModalOpen.value = false;
   selectedTicket.value = null;
 };
-
-const formatDate = (dateString: string) => dateString ? new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
-const truncateText = (text: string, maxLength: number) => text?.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-const getStatusColor = (status: string) => status.toLowerCase() === 'open' ? 'warning' : status.toLowerCase() === 'closed' ? 'success' : 'medium';
 const refreshTickets = () => loadTickets();
-const navigateToAddTicket = () => router.push('/ticket/add');
-const openFilterModal = () => console.log("Open Filters");
+
+const navigateToAddTicket = () => {
+  window.location.href = "/app/add-ticket";
+};
 </script>
-
-<style scoped>
-/* Page background with soft gradient */
-ion-content {
-  --background: linear-gradient(135deg, #f9f9f9, #eef2f3);
-  padding: 12px 0;
-}
-
-/* Toolbar with slight shadow */
-ion-toolbar {
-  --background: #ffffff;
-  border-bottom: 2px solid #7d6412;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* Title */
-ion-title {
-  font-weight: 700;
-  color: #2c3e50;
-  font-size: 1.2rem;
-}
-
-/* Toolbar buttons */
-ion-button {
-  --color: #2c3e50;
-  --background: transparent;
-  --ripple-color: #7d6412;
-  transition: all 0.3s ease;
-}
-ion-button:hover {
-  --color: #7d6412;
-  transform: scale(1.1);
-}
-
-/* Ticket card with glassmorphism effect */
-.ticket-card {
-  margin: 14px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(241, 196, 15, 0.3);
-  position: relative;
-  cursor: pointer;
-}
-.ticket-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-  border-color: #7d6412;
-}
-
-/* Card header & title */
-ion-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 4px;
-}
-ion-card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2c3e50;
-  letter-spacing: 0.3px;
-}
-
-/* Status chip with gradient colors */
-.status-chip {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 14px;
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, #7d6412, #f39c12);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Card content */
-ion-card-content p {
-  margin: 6px 0;
-  font-size: 0.9rem;
-  color: #34495e;
-  line-height: 1.4;
-}
-ion-card-content strong {
-  color: #2c3e50;
-}
-
-/* Empty state */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;
-  text-align: center;
-  color: #7f8c8d;
-  gap: 12px;
-}
-.empty-state ion-icon {
-  font-size: 60px;
-  color: #bdc3c7;
-  animation: pulseIcon 1.5s infinite ease-in-out;
-}
-@keyframes pulseIcon {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.2); opacity: 1; }
-}
-
-/* Modal with soft edges */
-ion-modal {
-  --width: 92%;
-  --height: 88%;
-  --border-radius: 16px;
-  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  overflow: hidden;
-}
-
-/* Modal cards */
-ion-modal ion-card {
-  margin-bottom: 14px;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-  background: #fff;
-}
-ion-modal ion-card:hover {
-  transform: translateY(-2px);
-}
-
-/* Modal header & title */
-ion-modal ion-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 6px;
-}
-ion-modal ion-card-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #2c3e50;
-}
-
-/* List items inside modal */
-ion-list ion-item {
-  --background: #f9fafb;
-  margin-bottom: 8px;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  color: #2c3e50;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: background 0.3s ease;
-}
-ion-list ion-item:hover {
-  --background: #fff8e1;
-}
-
-/* Chips in modal */
-ion-chip {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #7d6412, #f39c12);
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .ticket-card {
-    margin: 10px;
-    padding: 8px;
-  }
-  ion-card-content p {
-    font-size: 0.85rem;
-  }
-  ion-card-title {
-    font-size: 0.95rem;
-  }
-  .status-chip {
-    font-size: 0.7rem;
-    padding: 3px 8px;
-  }
-}
-</style>

@@ -12,7 +12,12 @@ export const useAuthStore = defineStore('auth', () => {
   
   const login = async (credentials: { email: string; password: string }) => {
     try {
-      const response = await authService.login(credentials);
+      interface LoginResponse {
+        user: any;
+        token: string;
+      }
+
+      const response = (await authService.login(credentials)) as LoginResponse;
       user.value = response.user;
       isAuthenticated.value = true;
       localStorage.setItem('authToken', response.token);
