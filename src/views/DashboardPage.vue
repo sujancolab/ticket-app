@@ -80,7 +80,7 @@
   <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar color="primary">
+      <ion-toolbar class="custom-toolbar">
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
@@ -88,14 +88,14 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding" style="--background: #f2f2f2;">
 
       <ion-grid>
         <ion-row>
           <ion-col size="12" size-md="6">
             <ion-card @click="navigateToTickets" class="dashboard-card">
               <ion-card-header>
-                <ion-card-title>Tickets</ion-card-title>
+                <ion-card-title>View Tickets</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <p>View all tickets and manage them efficiently.</p>
@@ -184,5 +184,10 @@ ion-card-content p {
   .dashboard-card {
     margin-bottom: 20px;
   }
+}
+
+.custom-toolbar {
+  --background: #7d6412; /* custom color */
+  --color: #fff; /* text color */
 }
 </style>

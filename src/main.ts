@@ -37,6 +37,8 @@ import '@ionic/vue/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import { StatusBar, Style } from '@capacitor/status-bar';
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
@@ -44,3 +46,7 @@ const app = createApp(App)
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+
+StatusBar.setOverlaysWebView({ overlay: false });
+StatusBar.setBackgroundColor({ color: '#7d6412' });

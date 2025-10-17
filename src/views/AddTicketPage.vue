@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar color="primary">
+      <ion-toolbar class="custom-toolbar">
         <ion-buttons slot="start">
           <ion-menu-button class="menu-btn"></ion-menu-button>
         </ion-buttons>
@@ -16,14 +16,14 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="professional-content">
+    <ion-content class="professional-content" style="--background: #f2f2f2; ">
       <div style="padding: 5px;">
         <form @submit.prevent="submitTicket" class="professional-form">
           <!-- Machine Configuration Section -->
           <ion-card class="form-section">
             <ion-card-header style="padding: 0px; margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <ion-icon :icon="settingsOutline" class="section-icon"></ion-icon>
+                <ion-icon :icon="settingsOutline" color="primary" class="section-icon"></ion-icon>
                 <h5 style="margin: 0; color: black;">Machine Configuration</h5>
               </div>
             </ion-card-header>
@@ -107,7 +107,7 @@
           <ion-card class="form-section">
             <ion-card-header style="padding: 0px; margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <ion-icon :icon="bugOutline" class="section-icon"></ion-icon>
+                <ion-icon :icon="bugOutline" color="primary" class="section-icon"></ion-icon>
                 <h5 style="margin: 0; color: black;">Problem Details</h5>
               </div>
             </ion-card-header>
@@ -170,7 +170,7 @@
           <ion-card class="form-section">
             <ion-card-header style="padding: 0px; margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <ion-icon :icon="peopleOutline" class="section-icon"></ion-icon>
+                <ion-icon :icon="peopleOutline" color="primary" class="section-icon"></ion-icon>
                 <h5 style="margin: 0; color: black;">Maintenance Provider</h5>
               </div>
             </ion-card-header>
@@ -182,15 +182,15 @@
                   <!-- <label class="field-label">
                     Maintenance Provider <span class="required-indicator">*</span>
                   </label> -->
-                  <ion-segment v-model="form.maintenance_provider" @ionChange="onMaintenanceProviderChange"
+                  <ion-segment color="primary" v-model="form.maintenance_provider" @ionChange="onMaintenanceProviderChange"
                     class="professional-segment">
-                    <ion-segment-button value="vendor">
+                    <ion-segment-button value="vendor" color="primary">
                       <span style="display: flex; align-items: center; gap: 6px;">
                         <ion-icon :icon="businessOutline"></ion-icon>
                         <span>Vendor</span>
                       </span>
                     </ion-segment-button>
-                    <ion-segment-button value="user">
+                    <ion-segment-button value="user" color="primary">
                       <span style="display: flex; align-items: center; gap: 6px;">
                         <ion-icon :icon="personOutline"></ion-icon>
                         <span>Internal User</span>
@@ -210,7 +210,7 @@
                   </ion-select>
                   <div v-if="submitted && form.maintenance_provider === 'vendor' && !form.vendor_id.length"
                     class="error-message">
-                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    <ion-icon :icon="alertCircleOutline" color="primary" class="error-icon"></ion-icon>
                     Vendor selection is required
                   </div>
                 </div>
@@ -225,7 +225,7 @@
                     </ion-select-option>
                   </ion-select>
                   <div v-if="submitted && form.maintenance_provider === 'user' && !form.user_id" class="error-message">
-                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    <ion-icon :icon="alertCircleOutline" color="primary" class="error-icon"></ion-icon>
                     User selection is required
                   </div>
                 </div>
@@ -233,17 +233,17 @@
                 <!-- Service Type for Vendor -->
                 <div class="form-field full-width" v-if="form.maintenance_provider === 'vendor'">
                   <label class="field-label">Service Type</label>
-                  <ion-radio-group v-model="form.service_type" class="service-type-group">
+                  <ion-radio-group v-model="form.service_type" class="service-type-group" color="primary">
                     <div class="radio-option" style="justify-content: space-between;">
                       <div class="radio-content">
-                        <ion-icon :icon="cardOutline" class="radio-icon" style="font-size: 24px;"></ion-icon>
+                        <ion-icon :icon="cardOutline" color="primary" class="radio-icon" style="font-size: 24px;"></ion-icon>
                         <span>Paid Service</span>
                       </div>
                       <ion-radio value="Paid Service" :disabled="form.id != ''" class="professional-radio"></ion-radio>
                     </div>
                     <div class="radio-option" style="justify-content: space-between; margin-top: 10px;">
                       <div class="radio-content">
-                        <ion-icon :icon="giftOutline" class="radio-icon" style="font-size: 24px;"></ion-icon>
+                        <ion-icon :icon="giftOutline" color="primary"  class="radio-icon" style="font-size: 24px;"></ion-icon>
                         <span>Free Service</span>
                       </div>
                       <ion-radio value="Free Service"
@@ -269,7 +269,7 @@
           <ion-card class="form-section">
             <ion-card-header style="padding: 0px; margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <ion-icon :icon="calendarOutline" class="section-icon"></ion-icon>
+                <ion-icon :icon="calendarOutline" color="primary" class="section-icon"></ion-icon>
                 <h5 style="margin: 0; color: black;">Schedule & Timeline</h5>
               </div>
             </ion-card-header>
@@ -286,7 +286,7 @@
                     class="professional-datetime"
                     :class="{ 'field-error': submitted && !form.likely_date }"></ion-datetime>
                   <div v-if="submitted && !form.likely_date" class="error-message">
-                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    <ion-icon :icon="alertCircleOutline" color="primary" class="error-icon"></ion-icon>
                     Expected date is required
                   </div>
                 </div>
@@ -303,7 +303,7 @@
                     class="professional-datetime"
                     :class="{ 'field-error': submitted && !form.actual_fault_date }"></ion-datetime>
                   <div v-if="submitted && !form.actual_fault_date" class="error-message">
-                    <ion-icon :icon="alertCircleOutline" class="error-icon"></ion-icon>
+                    <ion-icon :icon="alertCircleOutline" color="primary" class="error-icon"></ion-icon>
                     Breakdown date is required
                   </div>
                 </div>
@@ -332,7 +332,7 @@
           <ion-card class="form-section">
             <ion-card-header style="padding: 0px; margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <ion-icon :icon="calculatorOutline" class="section-icon"></ion-icon>
+                <ion-icon color="primary" :icon="calculatorOutline" class="section-icon"></ion-icon>
                 <h5 style="margin: 0; color: black;">Cost Estimation</h5>
               </div>
             </ion-card-header>
@@ -351,7 +351,7 @@
                     <input type="file" @change="uploadMaterialCost" multiple ref="filematerial" class="file-input"
                       id="material-files" />
                     <label for="material-files" class="file-upload-label">
-                      <ion-icon :icon="cloudUploadOutline" class="upload-icon"></ion-icon>
+                      <ion-icon color="primary" :icon="cloudUploadOutline" class="upload-icon"></ion-icon>
                       <span>Upload Files</span>
                     </label>
                   </div>
@@ -366,7 +366,7 @@
                     <input type="file" @change="uploadServiceCost" multiple ref="fileservice" class="file-input"
                       id="service-files" />
                     <label for="service-files" class="file-upload-label">
-                      <ion-icon :icon="cloudUploadOutline" class="upload-icon"></ion-icon>
+                      <ion-icon color="primary" :icon="cloudUploadOutline" class="upload-icon"></ion-icon>
                       <span>Upload Files</span>
                     </label>
                   </div>
@@ -383,11 +383,11 @@
           <!-- Stages Section (Edit Mode) -->
           <div class="form-section" v-if="form.id">
             <div class="section-header">
-              <ion-icon :icon="listOutline" class="section-icon"></ion-icon>
+              <ion-icon color="primary" :icon="listOutline" class="section-icon"></ion-icon>
               <h2>Project Stages</h2>
               <ion-button @click="AddStage" fill="outline" size="small" class="add-stage-btn"
                 :disabled="form.stages.length > 0 && !last_stage_index && !last_stage_date">
-                <ion-icon :icon="addOutline" slot="start"></ion-icon>
+                <ion-icon color="primary" :icon="addOutline" slot="start"></ion-icon>
                 Add Stage
               </ion-button>
             </div>
@@ -1440,5 +1440,10 @@ ion-select::part(text) {
 .alert-checkbox-group.sc-ion-alert-md {
   max-height: 250px !important; /* adjust as needed */
   overflow-y: auto !important;
+}
+
+.custom-toolbar {
+  --background: #7d6412; /* custom color */
+  --color: #fff; /* text color */
 }
 </style>

@@ -31,7 +31,7 @@
                 :class="{ 'selected': $route.name === 'Tickets' }"
               >
                 <ion-icon slot="start" :icon="list"></ion-icon>
-                <ion-label>Tickets</ion-label>
+                <ion-label>View Tickets</ion-label>
               </ion-item>
               
               <ion-item 
