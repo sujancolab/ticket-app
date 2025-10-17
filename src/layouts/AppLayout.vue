@@ -65,9 +65,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { 
-  IonApp, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, 
-  IonContent, IonList, IonItem, IonLabel, IonMenuToggle, IonFooter,
-  IonButton, IonIcon, IonRouterOutlet
+  IonApp, IonSplitPane, IonMenu, IonHeader, IonToolbar, 
+  IonContent, IonList, IonItem, IonLabel, IonMenuToggle, IonIcon, IonRouterOutlet
 } from '@ionic/vue';
 import { home, list, add, logOut } from 'ionicons/icons';
 import { ref, onMounted } from 'vue';
