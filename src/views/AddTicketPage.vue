@@ -69,7 +69,7 @@
 
                 <!-- Machine Sub Category -->
 
-                <ion-select v-model="form.sub_category_id" interface="popover" placeholder="Select Sub Category"
+                <ion-select v-model="form.sub_category_id" interface="alert" placeholder="Select Sub Category"
                   label="Machine Sub Category *" labelPlacement="floating" @ionChange="onSubCategoryChange"
                   :class="['border-bottom-select', { 'field-error': submitted && !form.sub_category_id }]"
                   style="color: black;">
@@ -86,7 +86,7 @@
 
                 <!-- Select Machine -->
 
-                <ion-select v-model="form.machine_id" interface="popover" placeholder="Choose Machine"
+                <ion-select v-model="form.machine_id" interface="alert" placeholder="Choose Machine"
                   @ionChange="onMachineChange" label="Select Machine *" labelPlacement="floating"
                   :class="['border-bottom-select', { 'field-error': submitted && !form.machine_id }]"
                   style="color: black;">
@@ -182,8 +182,8 @@
                   <!-- <label class="field-label">
                     Maintenance Provider <span class="required-indicator">*</span>
                   </label> -->
-                  <ion-segment color="primary" v-model="form.maintenance_provider" @ionChange="onMaintenanceProviderChange"
-                    class="professional-segment">
+                  <ion-segment color="primary" v-model="form.maintenance_provider"
+                    @ionChange="onMaintenanceProviderChange" class="professional-segment">
                     <ion-segment-button value="vendor" color="primary">
                       <span style="display: flex; align-items: center; gap: 6px;">
                         <ion-icon :icon="businessOutline"></ion-icon>
@@ -236,14 +236,16 @@
                   <ion-radio-group v-model="form.service_type" class="service-type-group" color="primary">
                     <div class="radio-option" style="justify-content: space-between;">
                       <div class="radio-content">
-                        <ion-icon :icon="cardOutline" color="primary" class="radio-icon" style="font-size: 24px;"></ion-icon>
+                        <ion-icon :icon="cardOutline" color="primary" class="radio-icon"
+                          style="font-size: 24px;"></ion-icon>
                         <span>Paid Service</span>
                       </div>
                       <ion-radio value="Paid Service" :disabled="form.id != ''" class="professional-radio"></ion-radio>
                     </div>
                     <div class="radio-option" style="justify-content: space-between; margin-top: 10px;">
                       <div class="radio-content">
-                        <ion-icon :icon="giftOutline" color="primary"  class="radio-icon" style="font-size: 24px;"></ion-icon>
+                        <ion-icon :icon="giftOutline" color="primary" class="radio-icon"
+                          style="font-size: 24px;"></ion-icon>
                         <span>Free Service</span>
                       </div>
                       <ion-radio value="Free Service"
@@ -1438,12 +1440,15 @@ ion-select::part(text) {
 .action-sheet-group.sc-ion-action-sheet-md,
 .alert-radio-group.sc-ion-alert-md,
 .alert-checkbox-group.sc-ion-alert-md {
-  max-height: 250px !important; /* adjust as needed */
+  max-height: 250px !important;
+  /* adjust as needed */
   overflow-y: auto !important;
 }
 
 .custom-toolbar {
-  --background: #7d6412; /* custom color */
-  --color: #fff; /* text color */
+  --background: #7d6412;
+  /* custom color */
+  --color: #fff;
+  /* text color */
 }
 </style>

@@ -284,22 +284,22 @@
               <ion-icon :icon="cashOutline" style="vertical-align: middle; margin-right: 8px;" color="primary" /> Cost Details
             </ion-card-title>
           </ion-card-header>
-            <ion-list style="margin-left: 16px; margin-right: 16px;">
+            <ion-list class="cost-details-list" style="margin-left: 16px; margin-right: 16px;">
               <ion-item lines="none">
               <ion-label>Estimated Material Cost</ion-label>
-              <ion-text>{{ selectedTicket.estimated_material_cost || 0 }}</ion-text>
+              <ion-text slot="end">{{ selectedTicket.estimated_material_cost || 0 }}</ion-text>
               </ion-item>
               <ion-item lines="none">
               <ion-label>Estimated Service Cost</ion-label>
-              <ion-text>{{ selectedTicket.estimated_service_cost || 0 }}</ion-text>
+              <ion-text slot="end">{{ selectedTicket.estimated_service_cost || 0 }}</ion-text>
               </ion-item>
               <ion-item lines="none">
               <ion-label>Actual Material Cost</ion-label>
-              <ion-text>{{ selectedTicket.actual_material_cost || 0 }}</ion-text>
+              <ion-text slot="end">{{ selectedTicket.actual_material_cost || 0 }}</ion-text>
               </ion-item>
               <ion-item lines="none">
               <ion-label>Actual Service Cost</ion-label>
-              <ion-text>{{ selectedTicket.actual_service_cost || 0 }}</ion-text>
+              <ion-text slot="end">{{ selectedTicket.actual_service_cost || 0 }}</ion-text>
               </ion-item>
             </ion-list>
 
@@ -489,8 +489,19 @@ ion-modal {
 
 ion-list ion-item {
   --background: #f8f9fa;
+  --color: var(--ion-color-dark);
   margin-bottom: 6px;
   border-radius: 8px;
+}
+
+.cost-details-list ion-item {
+  --background: #ffffff;
+  --color: #1f2937;
+}
+
+.cost-details-list ion-label,
+.cost-details-list ion-text {
+  color: #1f2937 !important;
 }
 
 .summary-label {
