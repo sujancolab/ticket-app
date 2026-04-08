@@ -4,10 +4,10 @@
     "capacitor": {}
   },
   "type": "vue-vite",
-   "proxy": [
+  "proxy": [
     {
       "path": "/api",
-      "proxyUrl": "https://dummymm.tech-trico.com/api"
+      "proxyUrl": "https://rmm.tech-trico.com/api"
     }
   ]
 }

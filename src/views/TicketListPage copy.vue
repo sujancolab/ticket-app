@@ -57,13 +57,16 @@
           <ion-footer>
             <ion-toolbar>
               <ion-buttons slot="end">
-                <ion-button color="primary" fill="outline" @click.stop="editTicket(ticket)" v-if="ticket.status !== 'Closed'">
+                <ion-button color="primary" fill="outline" @click.stop="editTicket(ticket)"
+                  v-if="ticket.status !== 'Closed'">
                   <ion-icon :icon="create"></ion-icon>
                 </ion-button>
-                <ion-button color="danger" fill="outline" @click.stop="closeTicket(ticket)" v-if="ticket.status !== 'Closed'">
+                <ion-button color="danger" fill="outline" @click.stop="closeTicket(ticket)"
+                  v-if="ticket.status !== 'Closed'">
                   <ion-icon :icon="closeCircle"></ion-icon>
                 </ion-button>
-                <ion-button color="success" fill="outline" @click.stop="reopenTicket(ticket)" v-if="ticket.status === 'Closed'">
+                <ion-button color="success" fill="outline" @click.stop="reopenTicket(ticket)"
+                  v-if="ticket.status === 'Closed'">
                   <ion-icon :icon="refreshCircle"></ion-icon>
                 </ion-button>
               </ion-buttons>
@@ -83,27 +86,22 @@
       <ion-footer v-if="tickets.data && tickets.data.length > 0">
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button shape="round" color="medium" :disabled="!tickets.prev_page_url" @click="changePage(tickets.current_page - 1)">
+            <ion-button shape="round" color="medium" :disabled="!tickets.prev_page_url"
+              @click="changePage(tickets.current_page - 1)">
               <ion-icon :icon="refresh" slot="start"></ion-icon> Prev
             </ion-button>
           </ion-buttons>
 
           <div class="pagination-numbers">
-            <ion-button
-              v-for="page in getPageNumbers"
-              :key="page"
-              shape="round"
-              size="small"
-              :fill="tickets.current_page === page ? 'solid' : 'outline'"
-              color="primary"
-              @click="changePage(page)"
-            >
+            <ion-button v-for="page in getPageNumbers" :key="page" shape="round" size="small"
+              :fill="tickets.current_page === page ? 'solid' : 'outline'" color="primary" @click="changePage(page)">
               {{ page }}
             </ion-button>
           </div>
 
           <ion-buttons slot="end">
-            <ion-button shape="round" color="medium" :disabled="!tickets.next_page_url" @click="changePage(tickets.current_page + 1)">
+            <ion-button shape="round" color="medium" :disabled="!tickets.next_page_url"
+              @click="changePage(tickets.current_page + 1)">
               Next <ion-icon :icon="refreshCircle" slot="end"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -151,13 +149,15 @@
                 <ion-item>
                   <ion-label position="stacked">Machine</ion-label>
                   <ion-select v-model="search.machine_id" placeholder="Select machine">
-                    <ion-select-option v-for="m in search_machines" :key="m.id" :value="m.id">{{ m.far_no }} - {{ m.name }}</ion-select-option>
+                    <ion-select-option v-for="m in search_machines" :key="m.id" :value="m.id">{{ m.far_no }} - {{ m.name
+                      }}</ion-select-option>
                   </ion-select>
                 </ion-item>
                 <ion-item>
                   <ion-label position="stacked">Site</ion-label>
                   <ion-select v-model="search.site_id" placeholder="Select site">
-                    <ion-select-option v-for="s in search_sites" :key="s.id" :value="s.id">{{ s.site_name }}</ion-select-option>
+                    <ion-select-option v-for="s in search_sites" :key="s.id" :value="s.id">{{ s.site_name
+                      }}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </div>
@@ -204,7 +204,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { 
+import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel, IonFab, IonFabButton, IonIcon, IonMenuButton, IonButton, IonChip, IonRefresher, IonRefresherContent, IonFooter, IonModal, IonSelect, IonSelectOption, IonInput, IonDatetime, IonGrid, IonRow, IonCol, IonAccordion, IonAccordionGroup, IonItem, IonSkeletonText, toastController, alertController
 } from '@ionic/vue';
 import { add, documentText, refresh, filter, create, closeCircle, refreshCircle } from 'ionicons/icons';
@@ -226,7 +226,7 @@ const search = ref({ page: 1, machine_id: "", site_id: "", ticket_type: "", tick
 
 onMounted(() => { loadTickets(); loadInitialData(); });
 
-const api = axios.create({ baseURL: 'https://dummymm.tech-trico.com', timeout: 10000 });
+const api = axios.create({ baseURL: 'https://rmm.tech-trico.com', timeout: 10000 });
 
 const loadTickets = async () => {
   try {
@@ -238,7 +238,7 @@ const loadTickets = async () => {
 };
 
 const loadInitialData = async () => {
-  try { const response = await axios.get("/api/initial_ticket"); search_machines.value = response.data.data.machines; search_sites.value = response.data.data.sites; } 
+  try { const response = await axios.get("/api/initial_ticket"); search_machines.value = response.data.data.machines; search_sites.value = response.data.data.sites; }
   catch { console.error("Error loading initial data"); }
 };
 
@@ -287,18 +287,70 @@ const showToast = async (message: string, color: string = 'primary') => { const 
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
-.ticket-card:hover { transform: translateY(-2px); }
-.status-chip { position: absolute; top: 12px; right: 12px; font-size: 0.85rem; }
-ion-card-content p { margin: 4px 0; font-size: 0.9rem; }
-ion-footer ion-button { margin: 4px; border-radius: 8px; }
 
-.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: var(--ion-color-medium); }
-.empty-state ion-icon { font-size: 48px; margin-bottom: 16px; color: var(--ion-color-medium-shade); }
+.ticket-card:hover {
+  transform: translateY(-2px);
+}
 
-.pagination-numbers { display: flex; justify-content: center; align-items: center; gap: 6px; }
-.pagination-numbers ion-button { min-width: 36px; font-size: 0.9rem; --border-radius: 50%; }
+.status-chip {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.85rem;
+}
 
-ion-skeleton-text { border-radius: 6px; margin: 6px 0; }
-ion-accordion ion-item { --background: var(--ion-color-light); }
-ion-accordion-group { margin-top: 8px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+ion-card-content p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+ion-footer ion-button {
+  margin: 4px;
+  border-radius: 8px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  color: var(--ion-color-medium);
+}
+
+.empty-state ion-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: var(--ion-color-medium-shade);
+}
+
+.pagination-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-numbers ion-button {
+  min-width: 36px;
+  font-size: 0.9rem;
+  --border-radius: 50%;
+}
+
+ion-skeleton-text {
+  border-radius: 6px;
+  margin: 6px 0;
+}
+
+ion-accordion ion-item {
+  --background: var(--ion-color-light);
+}
+
+ion-accordion-group {
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
 </style>

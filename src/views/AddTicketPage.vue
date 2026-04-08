@@ -504,7 +504,7 @@ import {
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://dummymm.tech-trico.com',
+  baseURL: 'https://rmm.tech-trico.com',
   timeout: 10000,
 });
 
@@ -879,7 +879,7 @@ onMounted(() => {
 
 
   // Load initial data
-  api.get("https://dummymm.tech-trico.com/api/get_pre_machine-app").then((res) => {
+  api.get("https://rmm.tech-trico.com/api/get_pre_machine-app").then((res) => {
     categories.value = res.data.data.Category;
     sites.value = res.data.data.sites;
 

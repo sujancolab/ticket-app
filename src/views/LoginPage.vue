@@ -173,40 +173,27 @@ ion-card-title {
           <div class="logo-container">
             <img src="/src/assets/logo.png" alt="Company Logo" class="logo">
           </div>
-          
+
           <ion-card-header>
             <ion-card-title class="ion-text-center">Machine Maintenance</ion-card-title>
           </ion-card-header>
-          
+
           <ion-card-content>
             <ion-item class="ion-margin-bottom">
               <ion-label position="floating" class="ion-text-wrap">Username</ion-label>
-              <ion-input 
-                v-model="username" 
-                type="text" 
-                clear-input
-                :class="{ 'ion-invalid': submitted && !username }"
-              ></ion-input>
+              <ion-input v-model="username" type="text" clear-input
+                :class="{ 'ion-invalid': submitted && !username }"></ion-input>
               <ion-note slot="error" v-if="submitted && !username">Username is required</ion-note>
             </ion-item>
-            
+
             <ion-item class="ion-margin-bottom">
               <ion-label position="floating" class="ion-text-wrap">Password</ion-label>
-              <ion-input 
-                v-model="password" 
-                type="password" 
-                clear-input
-                :class="{ 'ion-invalid': submitted && !password }"
-              ></ion-input>
+              <ion-input v-model="password" type="password" clear-input
+                :class="{ 'ion-invalid': submitted && !password }"></ion-input>
               <ion-note slot="error" v-if="submitted && !password">Password is required</ion-note>
             </ion-item>
-            
-            <ion-button 
-              expand="block" 
-              @click="login" 
-              class="ion-margin-top"
-              :disabled="isLoggingIn"
-            >
+
+            <ion-button expand="block" @click="login" class="ion-margin-top" :disabled="isLoggingIn">
               <ion-spinner v-if="isLoggingIn" name="crescent"></ion-spinner>
               <span v-else>Login</span>
             </ion-button>
@@ -221,7 +208,7 @@ ion-card-title {
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { 
+import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
   IonItem, IonLabel, IonInput, IonButton, IonNote,
@@ -236,7 +223,7 @@ const isLoggingIn = ref(false);
 
 const login = async () => {
   submitted.value = true;
-  
+
   if (!username.value || !password.value) {
     const toast = await toastController.create({
       message: 'Please enter both username and password',
@@ -252,7 +239,7 @@ const login = async () => {
 
   try {
     // API call for login
-    const response = await axios.post('https://dummymm.tech-trico.com/api/app-login', {
+    const response = await axios.post('https://rmm.tech-trico.com/api/app-login', {
       email: username.value,
       password: password.value
     });

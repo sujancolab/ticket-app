@@ -82,27 +82,22 @@
       <ion-footer v-if="tickets.data && tickets.data.length > 0 && !loading">
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button shape="round" color="medium" :disabled="!tickets.prev_page_url" @click="changePage(tickets.current_page - 1)">
+            <ion-button shape="round" color="medium" :disabled="!tickets.prev_page_url"
+              @click="changePage(tickets.current_page - 1)">
               <ion-icon :icon="chevronBack" slot="start"></ion-icon> Prev
             </ion-button>
           </ion-buttons>
 
           <div class="pagination-numbers">
-            <ion-button
-              v-for="page in getPageNumbers"
-              :key="page"
-              shape="round"
-              size="small"
-              :fill="tickets.current_page === page ? 'solid' : 'outline'"
-              color="primary"
-              @click="changePage(page)"
-            >
+            <ion-button v-for="page in getPageNumbers" :key="page" shape="round" size="small"
+              :fill="tickets.current_page === page ? 'solid' : 'outline'" color="primary" @click="changePage(page)">
               {{ page }}
             </ion-button>
           </div>
 
           <ion-buttons slot="end">
-            <ion-button shape="round" color="medium" :disabled="!tickets.next_page_url" @click="changePage(tickets.current_page + 1)">
+            <ion-button shape="round" color="medium" :disabled="!tickets.next_page_url"
+              @click="changePage(tickets.current_page + 1)">
               Next <ion-icon :icon="chevronForward" slot="end"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -143,13 +138,15 @@
                 <ion-item>
                   <ion-label position="stacked">Machine</ion-label>
                   <ion-select v-model="search.machine_id" placeholder="Select machine">
-                    <ion-select-option v-for="m in search_machines" :key="m.id" :value="m.id">{{ m.far_no }} - {{ m.name }}</ion-select-option>
+                    <ion-select-option v-for="m in search_machines" :key="m.id" :value="m.id">{{ m.far_no }} - {{ m.name
+                      }}</ion-select-option>
                   </ion-select>
                 </ion-item>
                 <ion-item>
                   <ion-label position="stacked">Site</ion-label>
                   <ion-select v-model="search.site_id" placeholder="Select site">
-                    <ion-select-option v-for="s in search_sites" :key="s.id" :value="s.id">{{ s.site_name }}</ion-select-option>
+                    <ion-select-option v-for="s in search_sites" :key="s.id" :value="s.id">{{ s.site_name
+                      }}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </div>
@@ -256,10 +253,11 @@
           <!-- Stages -->
           <ion-card-header>
             <ion-card-title>
-                <ion-icon :icon="list" style="vertical-align: middle; margin-right: 8px;" color="primary" /> Stages
+              <ion-icon :icon="list" style="vertical-align: middle; margin-right: 8px;" color="primary" /> Stages
             </ion-card-title>
           </ion-card-header>
-          <ion-list v-if="selectedTicket.stages && selectedTicket.stages.length > 0" style="margin-left: 16px; margin-right: 16px;">
+          <ion-list v-if="selectedTicket.stages && selectedTicket.stages.length > 0"
+            style="margin-left: 16px; margin-right: 16px;">
             <ion-item v-for="(stage, index) in selectedTicket.stages" :key="index" lines="none">
               <div slot="start"
                 style="margin-right: 12px; background: #eee; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; color: #333;">
@@ -270,7 +268,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
                   <span style="font-size: 0.8rem; color: #555;">{{ stage.description }}</span>
                   <span style="font-size: 0.75rem; color: #888; white-space: nowrap;">{{ formatDate(stage.stage_date)
-                    }}</span>
+                  }}</span>
                 </div>
               </ion-label>
             </ion-item>
@@ -281,27 +279,28 @@
           <!-- Cost Details -->
           <ion-card-header>
             <ion-card-title>
-              <ion-icon :icon="cashOutline" style="vertical-align: middle; margin-right: 8px;" color="primary" /> Cost Details
+              <ion-icon :icon="cashOutline" style="vertical-align: middle; margin-right: 8px;" color="primary" /> Cost
+              Details
             </ion-card-title>
           </ion-card-header>
-            <ion-list class="cost-details-list" style="margin-left: 16px; margin-right: 16px;">
-              <ion-item lines="none">
+          <ion-list class="cost-details-list" style="margin-left: 16px; margin-right: 16px;">
+            <ion-item lines="none">
               <ion-label>Estimated Material Cost</ion-label>
               <ion-text slot="end">{{ selectedTicket.estimated_material_cost || 0 }}</ion-text>
-              </ion-item>
-              <ion-item lines="none">
+            </ion-item>
+            <ion-item lines="none">
               <ion-label>Estimated Service Cost</ion-label>
               <ion-text slot="end">{{ selectedTicket.estimated_service_cost || 0 }}</ion-text>
-              </ion-item>
-              <ion-item lines="none">
+            </ion-item>
+            <ion-item lines="none">
               <ion-label>Actual Material Cost</ion-label>
               <ion-text slot="end">{{ selectedTicket.actual_material_cost || 0 }}</ion-text>
-              </ion-item>
-              <ion-item lines="none">
+            </ion-item>
+            <ion-item lines="none">
               <ion-label>Actual Service Cost</ion-label>
               <ion-text slot="end">{{ selectedTicket.actual_service_cost || 0 }}</ion-text>
-              </ion-item>
-            </ion-list>
+            </ion-item>
+          </ion-list>
 
         </ion-content>
       </ion-modal>
@@ -334,23 +333,23 @@ const selectedTicket = ref<Ticket | null>(null);
 const search_machines = ref<Machine[]>([]);
 const search_sites = ref<Site[]>([]);
 
-const search = ref({ 
-  page: 1, 
-  machine_id: "", 
-  site_id: "", 
-  ticket_type: "", 
-  ticket: "", 
-  date_from: "", 
-  date_to: "", 
-  status: "" 
+const search = ref({
+  page: 1,
+  machine_id: "",
+  site_id: "",
+  ticket_type: "",
+  ticket: "",
+  date_from: "",
+  date_to: "",
+  status: ""
 });
 
-onMounted(() => { 
-  loadTickets(); 
+onMounted(() => {
+  loadTickets();
   loadInitialData();
 });
 
-const api = axios.create({ baseURL: 'https://dummymm.tech-trico.com', timeout: 10000 });
+const api = axios.create({ baseURL: 'https://rmm.tech-trico.com', timeout: 10000 });
 
 const loadTickets = async () => {
   try {
@@ -365,12 +364,12 @@ const loadTickets = async () => {
 };
 
 const loadInitialData = async () => {
-  try { 
-    const response = await api.get("/api/initial_ticket"); 
-    search_machines.value = response.data.data.machines; 
-    search_sites.value = response.data.data.sites; 
-  } catch (error) { 
-    console.error("Error loading initial data:", error); 
+  try {
+    const response = await api.get("/api/initial_ticket");
+    search_machines.value = response.data.data.machines;
+    search_sites.value = response.data.data.sites;
+  } catch (error) {
+    console.error("Error loading initial data:", error);
   }
 };
 
@@ -399,30 +398,30 @@ const closeViewModal = () => {
 
 const openFilterModal = () => filterModalOpen.value = true;
 
-const applyFilters = () => { 
-  search.value.page = 1; 
-  filterModalOpen.value = false; 
-  loadTickets(); 
+const applyFilters = () => {
+  search.value.page = 1;
+  filterModalOpen.value = false;
+  loadTickets();
 };
 
-const resetFilters = () => { 
-  search.value = { 
-    page: 1, 
-    machine_id: "", 
-    site_id: "", 
-    ticket_type: "", 
-    ticket: "", 
-    date_from: "", 
-    date_to: "", 
-    status: "" 
-  }; 
-  filterModalOpen.value = false; 
-  loadTickets(); 
+const resetFilters = () => {
+  search.value = {
+    page: 1,
+    machine_id: "",
+    site_id: "",
+    ticket_type: "",
+    ticket: "",
+    date_from: "",
+    date_to: "",
+    status: ""
+  };
+  filterModalOpen.value = false;
+  loadTickets();
 };
 
-const changePage = (page: number) => { 
-  search.value.page = page; 
-  loadTickets(); 
+const changePage = (page: number) => {
+  search.value.page = page;
+  loadTickets();
 };
 
 const formatDate = (dateString: string) => dateString ? new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
@@ -430,13 +429,13 @@ const truncateText = (text: string, maxLength: number) => text?.length > maxLeng
 const getStatusColor = (status: string) => status.toLowerCase() === 'open' ? 'danger' : status.toLowerCase() === 'closed' ? 'success' : 'medium';
 const refreshTickets = () => loadTickets();
 const navigateToAddTicket = () => router.push('/ticket/add');
-const handleRefresh = (event: CustomEvent) => { 
-  loadTickets(); 
+const handleRefresh = (event: CustomEvent) => {
+  loadTickets();
   setTimeout(() => {
     if (event.target) {
       (event.target as HTMLIonRefresherElement).complete();
     }
-  }, 1000); 
+  }, 1000);
 };
 </script>
 
@@ -569,7 +568,7 @@ ion-accordion-group {
   margin-top: 8px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* Responsive adjustments */
@@ -577,9 +576,11 @@ ion-accordion-group {
   .ticket-card {
     margin: 10px;
   }
+
   .pagination-numbers {
     gap: 4px;
   }
+
   .pagination-numbers ion-button {
     min-width: 32px;
     font-size: 0.8rem;
